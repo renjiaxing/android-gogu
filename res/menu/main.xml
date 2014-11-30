@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.rjx.gogu02.MainActivity" >
+    
+    <item  
+        android:id="@+id/action_share"  
+        app:actionProviderClass="com.rjx.gogu02.MyActionProvider"  
+        android:icon="@drawable/ic_launcher"  
+        app:showAsAction="ifRoom"  
+        android:title="action_share" /> 
+      
+    <item
+        android:id="@+id/main_menu_search"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_search"
+        app:showAsAction="ifRoom"
+        android:title="搜索"/>
+    <item
+        android:id="@+id/main_menu_msg"
+        android:icon="@drawable/ic_action_new_secret"
+        android:orderInCategory="100"
+        android:title="发布消息"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/main_menu_logout"
+        android:icon="@drawable/ic_action_info_single_chat"
+        android:orderInCategory="100"
+        android:title="注销账户"
+        app:showAsAction="ifRoom"/>
+
+
+</menu>

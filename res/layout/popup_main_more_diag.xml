@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gogu_green"
+    android:divider="@color/wh"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:showDividers="beginning|end" >
+
+    <TextView
+        android:id="@+id/mn_diag_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="我的消息"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/wh"
+        android:textSize="15dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0.2dp"
+        android:background="@color/bl" />
+
+    <TextView
+        android:id="@+id/mn_diag_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="注销登陆"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/wh"
+        android:textSize="15dp" />
+
+</LinearLayout>

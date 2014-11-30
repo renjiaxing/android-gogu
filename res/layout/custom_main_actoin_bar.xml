@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gogu_green"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/mn_logo"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:src="@drawable/logo_green" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3" />
+
+    <ImageView
+        android:id="@+id/mn_search"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_menu_search"
+        android:background="@drawable/mychangecolor" />
+
+    <ImageView
+        android:id="@+id/mn_new"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_action_new_secret"
+        android:background="@drawable/mychangecolor" />
+    <ImageView
+        android:id="@+id/mn_more"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        
+        android:layout_weight="1"
+        android:src="@drawable/ic_action_more"
+        android:background="@drawable/mychangecolor" />
+
+</LinearLayout>

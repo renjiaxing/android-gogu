@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_weight="0.16"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/id_text"
+            android:layout_width="1px"
+            android:layout_height="1px"
+            android:visibility="invisible" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/ic_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:maxLines="4"
+            android:text="TextView"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/ic_tv_stock_id"
+            android:layout_width="1px"
+            android:layout_height="1px"
+            android:visibility="invisible" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/ic_tv_stock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="2"
+            android:gravity="left"
+            android:maxLines="4"
+            android:text=""
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ic_iv_good"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:src="@drawable/ic_card_conversation_grey" />
+
+        <TextView
+            android:id="@+id/ic_tv_good"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:maxLines="4"
+            android:text=""
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ic_iv_reply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:src="@drawable/ic_card_conversation_grey" />
+
+        <TextView
+            android:id="@+id/ic_tv_reply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:text=""
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

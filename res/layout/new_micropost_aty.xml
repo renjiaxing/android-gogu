@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.rjx.gogu02.ResizeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nm_relative"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/nm_editText1"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/gogu_green"
+        android:ems="10"
+        android:hint="匿名发表信息"
+        android:inputType="textMultiLine"
+        android:padding="40dp"
+        android:textColor="@color/wh" />
+
+    <LinearLayout
+        android:id="@+id/nm_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <AutoCompleteTextView
+            android:id="@+id/nm_auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入股票代码"
+            android:textColor="@color/bl" >
+        </AutoCompleteTextView>
+    </LinearLayout>
+
+</com.rjx.gogu02.ResizeLayout>

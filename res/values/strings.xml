@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">gogu02</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="student">
+        <item>邓名侨</item>
+        <item>刘天喜</item>
+        <item>其黄石</item>
+        <item>蔡宏远</item>
+    </string-array>
+
+</resources>
