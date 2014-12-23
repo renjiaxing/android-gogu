@@ -22,23 +22,31 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/ic_menu_search"
-        android:background="@drawable/mychangecolor" />
+        android:background="@drawable/mychangecolor"
+        android:src="@drawable/ic_menu_search" />
 
     <ImageView
         android:id="@+id/mn_new"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/ic_action_new_secret"
-        android:background="@drawable/mychangecolor" />
+        android:background="@drawable/mychangecolor"
+        android:src="@drawable/ic_action_new_secret" />
+
+    <ImageView
+        android:id="@+id/mn_mychat"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/mychangecolor"
+        android:src="@drawable/ic_action_my_chat" />
+
     <ImageView
         android:id="@+id/mn_more"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        
         android:layout_weight="1"
-        android:src="@drawable/ic_action_more"
-        android:background="@drawable/mychangecolor" />
+        android:background="@drawable/mychangecolor"
+        android:src="@drawable/ic_action_more" />
 
 </LinearLayout>

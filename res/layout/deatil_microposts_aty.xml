@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.rjx.gogu02.ResizeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.rjx.gogu02.view.ResizeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dm_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -59,4 +59,4 @@
         </ListView>
     </LinearLayout>
 
-</com.rjx.gogu02.ResizeLayout>
+</com.rjx.gogu02.view.ResizeLayout>

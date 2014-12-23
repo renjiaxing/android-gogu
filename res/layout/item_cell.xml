@@ -37,6 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ic_tv_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -101,6 +102,35 @@
             android:gravity="left"
             android:text=""
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ic_iv_msg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.8"
+            android:gravity="center"
+            android:src="@drawable/ic_action_chat" />
+
+        <ImageView
+            android:id="@+id/ic_iv_del"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.6"
+            android:gravity="center"
+            android:src="@drawable/del" />
+
+        <ImageView
+            android:id="@+id/ic_iv_change"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.7"
+            android:gravity="center"
+            android:src="@drawable/change" />
     </LinearLayout>
 
 </LinearLayout>

@@ -4,6 +4,7 @@
     <string name="app_name">gogu02</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="send">发送</string>
 
     <string-array name="student">
         <item>邓名侨</item>
