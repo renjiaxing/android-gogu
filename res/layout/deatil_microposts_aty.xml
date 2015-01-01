@@ -44,6 +44,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="发送" />
+
+            <ImageView
+                android:id="@+id/dm_weixin"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_share_weixin" />
+                        <ImageView
+                android:id="@+id/dm_friends"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_share_pengyouquan" />
+
         </LinearLayout>
     </LinearLayout>
 

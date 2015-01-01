@@ -102,8 +102,8 @@ public class MyMicropostAty extends Activity {
 		
 		readNet(serUrl+"microposts_json?uid=" + user_id
 				+ "&&token=" + token+"&&my_id="+user_id, 0);
-		System.out.println("bbb");
-		System.out.println(mListItems);
+//		System.out.println("bbb");
+//		System.out.println(mListItems);
 
 		// ����ListView
 

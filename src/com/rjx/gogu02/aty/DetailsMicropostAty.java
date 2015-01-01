@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,12 @@ import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.utils.NetworkResources;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXTextObject;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 public class DetailsMicropostAty extends ActionBarActivity {
 
@@ -66,6 +73,9 @@ public class DetailsMicropostAty extends ActionBarActivity {
 	private static final int SMALLER = 2;
 	private int max = 0;
 	private String serUrl=ConstantValue.SERVER_URL;
+	private IWXAPI wxapi;
+	final public static String APP_ID="wx93895a32017d8532";
+	private String from_content;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -113,18 +123,61 @@ public class DetailsMicropostAty extends ActionBarActivity {
 				finish();
 			}
 		});
-
+		
+		wxapi=WXAPIFactory.createWXAPI(this, APP_ID);
+		wxapi.registerApp(APP_ID);
+		
+		ImageView weixin_iv=(ImageView) findViewById(R.id.dm_weixin);
+		
 		Button btn2 = (Button) findViewById(R.id.dm_btn2);
 		tv = (TextView) findViewById(R.id.dm_showText1);
 		mListView = (ListView) findViewById(R.id.dm_listView1);
 
 		Bundle data = getIntent().getExtras();
 		mid = data.getString("mid");
+		from_content=data.getString("content");
 
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		uid = sp.getString("user_id", "");
 		token = sp.getString("token", "");
 
+
+		weixin_iv.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				SendMessageToWX.Req req=new SendMessageToWX.Req();
+				req.transaction=""+System.currentTimeMillis();
+				WXWebpageObject webpage=new WXWebpageObject();
+				webpage.webpageUrl = serUrl+"microposts/"+mid+"/details";
+				req.scene=SendMessageToWX.Req.WXSceneSession;
+				req.message=new WXMediaMessage(webpage);
+				req.message.description=from_content;
+				req.message.title="股刺网";
+				
+				wxapi.sendReq(req);
+			}
+		});
+
+		ImageView friend_iv=(ImageView) findViewById(R.id.dm_friends);
+		
+		friend_iv.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				SendMessageToWX.Req req=new SendMessageToWX.Req();
+				req.transaction=""+System.currentTimeMillis();
+				WXWebpageObject webpage=new WXWebpageObject();
+				webpage.webpageUrl = serUrl+"microposts/"+mid+"/details";
+				req.scene=SendMessageToWX.Req.WXSceneTimeline;
+				req.message=new WXMediaMessage(webpage);
+				req.message.description=from_content;
+				req.message.title="股刺网："+from_content;
+				
+				wxapi.sendReq(req);				
+			}
+		});
+		
 		btn2.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -161,6 +214,12 @@ public class DetailsMicropostAty extends ActionBarActivity {
 		DetailsMicropostNet(serUrl+"detail_micropost_json?mid="
 				+ mid + "&&uid=" + uid + "&&token=" + token, 3);
 
+	}
+	
+	@Override
+	protected void onDestroy() {
+		wxapi.unregisterApp();
+		super.onDestroy();
 	}
 
 	// @Override

@@ -1,13 +1,7 @@
 package com.rjx.gogu02.aty;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.zip.GZIPInputStream;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -21,10 +15,10 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,13 +37,13 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.rjx.gogu02.R;
-import com.rjx.gogu02.R.id;
-import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.adapter.MicropostsAdapter;
 import com.rjx.gogu02.domain.Micropost;
+import com.rjx.gogu02.service.NotificationService;
 import com.rjx.gogu02.update.UpdateManager;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.view.AddPopDiag;
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -74,6 +68,11 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+//		CrashReport.testJavaCrash ();
+		
+		Intent serIntent=new Intent(this, NotificationService.class);
+		startService(serIntent);
 		
 		UpdateManager updateManager=new UpdateManager(this);
 		updateManager.checkUpdateInfo();
@@ -153,8 +152,8 @@ public class MainActivity extends ActionBarActivity {
 
 		readNet(serUrl+"microposts_json?uid=" + user_id
 				+ "&&token=" + token, 0);
-		System.out.println("bbb");
-		System.out.println(mListItems);
+//		System.out.println("bbb");
+//		System.out.println(mListItems);
 
 		// ����ListView
 

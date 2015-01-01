@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -26,10 +27,9 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 
 import com.rjx.gogu02.R;
-import com.rjx.gogu02.R.id;
-import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.utils.ConstantValue;
-import com.rjx.gogu02.utils.NetworkResources;
+import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.bugly.crashreport.CrashReport.UserStrategy;
 
 public class LogoPicAty extends Activity {
 	private String username = "";
@@ -38,55 +38,73 @@ public class LogoPicAty extends Activity {
 	private SharedPreferences sp;
 	private String token = "";
 	private String uid;
-	private String serUrl=ConstantValue.SERVER_URL;
+	private String serUrl = ConstantValue.SERVER_URL;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.logo_login_aty);
 		client = new DefaultHttpClient();
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		username = sp.getString("username", "");
 		token = sp.getString("token", "");
-		uid = sp.getString("user_id", "");		
+		uid = sp.getString("user_id", "");
+		
+		//初始化bugly
+		Context appContext = this.getApplicationContext();
+		String appId = "900001517"; // 上Bugly(bugly.qq.com)注册产品获取的AppId
+		boolean isDebug = true; // true代表App处于调试阶段，false代表App发布阶段
+		
+		UserStrategy strategy = new UserStrategy(getApplicationContext()); //App的策略Bean
+		if ("".equals(uid)){
+			strategy.setAppChannel( "unkown");     //设置渠道
+		} else {
+			strategy.setAppChannel(uid);     //设置渠道
+		}
+		strategy.setAppVersion( "BuglyDemo_1.0");      //App的版本
+		strategy.setAppReportDelay(5000);  //设置SDK处理延时，毫秒
+		
+		CrashReport.initCrashReport(appContext, appId, isDebug,strategy); // 初始化SDK
 
-		
-		ImageView iv=(ImageView) findViewById(R.id.logo_login_iv);
-		
-		AlphaAnimation animation=new AlphaAnimation(0.0f, 1.0f);
+		ImageView iv = (ImageView) findViewById(R.id.logo_login_iv);
+
+		AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
 		animation.setDuration(2000);
 		animation.setAnimationListener(new AnimationListener() {
-			
+
 			@Override
 			public void onAnimationStart(Animation animation) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onAnimationRepeat(Animation animation) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				if (uid != "") {
-					LoginNet(serUrl+"login_token_json?uid="
-							+ uid + "&&token=" + token, 6);
-				}else {
-					Intent it2=new Intent(getApplicationContext(), LoginAty.class);
+					LoginNet(serUrl + "login_token_json?uid=" + uid
+							+ "&&token=" + token, 6);
+				} else {
+					Intent it2 = new Intent(getApplicationContext(),
+							LoginAty.class);
 					startActivity(it2);
 					finish();
 				}
 			}
 		});
 		iv.setAnimation(animation);
-		
+
 	}
-	
+
 	public void LoginNet(String url, Integer mod) {
 		new AsyncTask<Object, Void, Integer>() {
 
@@ -123,7 +141,7 @@ public class LogoPicAty extends Activity {
 	Handler handler = new Handler() {
 
 		public void handleMessage(Message msg) {
-			switch (msg.what) {			
+			switch (msg.what) {
 			case 6:
 				try {
 					JSONObject con = new JSONObject(value.toString());

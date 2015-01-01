@@ -218,8 +218,10 @@ public class MicropostsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				String id_st = tmp.getId();
+				String id_content=tmp.getContent();
 				Bundle data = new Bundle();
 				data.putString("mid", id_st);
+				data.putString("content", id_content);
 				Intent it2 = new Intent(context, DetailsMicropostAty.class);
 				it2.putExtras(data);
 				context.startActivity(it2);
@@ -231,7 +233,9 @@ public class MicropostsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				String id_st = tmp.getId();
+				String id_content=tmp.getContent();
 				Bundle data = new Bundle();
+				data.putString("content", id_content);
 				data.putString("mid", id_st);
 				Intent it2 = new Intent(context, DetailsMicropostAty.class);
 				it2.putExtras(data);

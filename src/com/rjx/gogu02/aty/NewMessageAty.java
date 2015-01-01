@@ -1,6 +1,8 @@
 package com.rjx.gogu02.aty;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -98,9 +100,24 @@ public class NewMessageAty extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				NewMessageNet(serUrl + "new_message_json?uid=" + user_id
-						+ "&token=" + token + "&from_id=" + user_id + "&to_id="
-						+ to_uid + "&msg=" + msg_et.getText().toString(), 14);
+				try {
+					NewMessageNet(
+							serUrl
+									+ "new_message_json?uid="
+									+ user_id
+									+ "&token="
+									+ token
+									+ "&from_id="
+									+ user_id
+									+ "&to_id="
+									+ to_uid
+									+ "&msg="
+									+ URLEncoder.encode(msg_et.getText()
+											.toString(), "UTF-8"), 14);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -150,18 +167,18 @@ public class NewMessageAty extends Activity {
 					if (con.getString("result").equals("ok")) {
 						JSONArray msgArray = new JSONArray(con.getString(
 								"msgArray").toString());
-						if (msgArray.length()>0){
-						for (int i = 0; i < msgArray.length(); i++) {
-							JSONObject obj = msgArray.getJSONObject(i);
-							Msg tmp = new Msg(obj.getString("fromuser_id"),
-									obj.getString("touser_id"),
-									obj.getString("msg"),
-									obj.getString("created_at"),
-									obj.getString("anonnum"),
-									obj.getString("anontonum"));
-							messageList.add(tmp);
-						}
-						mAdapter.notifyDataSetChanged();
+						if (msgArray.length() > 0) {
+							for (int i = 0; i < msgArray.length(); i++) {
+								JSONObject obj = msgArray.getJSONObject(i);
+								Msg tmp = new Msg(obj.getString("fromuser_id"),
+										obj.getString("touser_id"),
+										obj.getString("msg"),
+										obj.getString("created_at"),
+										obj.getString("anonnum"),
+										obj.getString("anontonum"));
+								messageList.add(tmp);
+							}
+							mAdapter.notifyDataSetChanged();
 						}
 					} else {
 						showInfo("无法获取私信信息:(");
@@ -175,18 +192,19 @@ public class NewMessageAty extends Activity {
 					JSONObject con = new JSONObject(value.toString());
 
 					if (con.getString("result").equals("ok")) {
-						JSONObject obj = new JSONObject(con.getString(
-								"msg").toString());
+						JSONObject obj = new JSONObject(con.getString("msg")
+								.toString());
 
 						Msg tmp = new Msg(obj.getString("fromuser_id"),
-								obj.getString("touser_id"), obj.getString("msg"),
+								obj.getString("touser_id"),
+								obj.getString("msg"),
 								obj.getString("created_at"),
 								obj.getString("anonnum"),
 								obj.getString("anontonum"));
 						messageList.add(tmp);
 
 						mAdapter.notifyDataSetChanged();
-						
+
 					} else {
 						showInfo("无法获取私信信息:(");
 					}

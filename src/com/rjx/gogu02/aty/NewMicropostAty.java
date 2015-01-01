@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.integer;
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
@@ -43,6 +44,7 @@ import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
+import com.tencent.bugly.proguard.v;
 
 public class NewMicropostAty extends ActionBarActivity {
 
@@ -60,13 +62,14 @@ public class NewMicropostAty extends ActionBarActivity {
 	private ArrayList<String> tmp_stockList = new ArrayList<String>();
 	private ArrayList<String> tmp_sidList = new ArrayList<String>();
 	private ImageView iv;
-	private Integer count=0;
+	private Integer count = 0;
 	private ImageView iv_back;
 	private ImageView iv_send;
-    private static final int BIGGER = 1; 
-    private static final int SMALLER = 2; 
-    private int max = 0; 
-    private String serUrl=ConstantValue.SERVER_URL;
+	private static final int BIGGER = 1;
+	private static final int SMALLER = 2;
+	private static final int NOT_RIGHT_STOCK_FORMAT=3;
+	private int max = 0;
+	private String serUrl = ConstantValue.SERVER_URL;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +80,8 @@ public class NewMicropostAty extends ActionBarActivity {
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowCustomEnabled(true);
 		LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View mTitleView = mInflater.inflate(R.layout.custom_newmicropost_actoin_bar,
-				null);
+		View mTitleView = mInflater.inflate(
+				R.layout.custom_newmicropost_actoin_bar, null);
 		getActionBar().setCustomView(
 				mTitleView,
 				new ActionBar.LayoutParams(LayoutParams.MATCH_PARENT,
@@ -88,97 +91,105 @@ public class NewMicropostAty extends ActionBarActivity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		uid = sp.getString("user_id", "");
 		token = sp.getString("token", "");
-		
+
 		et1 = (EditText) findViewById(R.id.nm_editText1);
-		actx = (AutoCompleteTextView) findViewById(R.id.nm_auto);		
-		ResizeLayout rl=(ResizeLayout) findViewById(R.id.nm_relative);
-		
-//		actx.setOnFocusChangeListener(new OnFocusChangeListener() {
-//			
-//			@Override
-//			public void onFocusChange(View v, boolean hasFocus) {
-//				LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���   
-//				linearParams.height = (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);// ���ؼ��ĸ�ǿ�����50����   
-//				et1.setLayoutParams(linearParams);
-//			}
-//		});
-		
+		actx = (AutoCompleteTextView) findViewById(R.id.nm_auto);
+		ResizeLayout rl = (ResizeLayout) findViewById(R.id.nm_relative);
+
+		// actx.setOnFocusChangeListener(new OnFocusChangeListener() {
+		//
+		// @Override
+		// public void onFocusChange(View v, boolean hasFocus) {
+		// LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)
+		// et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���
+		// linearParams.height =
+		// (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);//
+		// ���ؼ��ĸ�ǿ�����50����
+		// et1.setLayoutParams(linearParams);
+		// }
+		// });
+
 		rl.setOnResizeListener(new OnResizeListener() {
-			
+
 			@Override
 			public void OnResize(int w, int h, int oldw, int oldh) {
-				int change=SMALLER;
-				if(max<h){max=h;}
-				Message msg=new Message();
-				if(h==max){
-					change=BIGGER;
+				int change = SMALLER;
+				if (max < h) {
+					max = h;
 				}
-				
-//				System.out.println(h);
-//				System.out.println(oldh);
-				
-				msg.what=change;
-//				if (change==BIGGER){
-//				    showInfo("aaa");
-//				    
-//				}else{
-//					showInfo("bbb");
-//				}
+				Message msg = new Message();
+				if (h == max) {
+					change = BIGGER;
+				}
+
+				// System.out.println(h);
+				// System.out.println(oldh);
+
+				msg.what = change;
+				// if (change==BIGGER){
+				// showInfo("aaa");
+				//
+				// }else{
+				// showInfo("bbb");
+				// }
 				handler.sendMessage(msg);
-				
+
 			}
 		});
-		
-		iv_back=(ImageView) findViewById(R.id.nm_iv_logo_back);
-		
-		iv_send=(ImageView) findViewById(R.id.nm_iv_send);
-		
-//        et1.setOnFocusChangeListener(new OnFocusChangeListener() {
-//			
-//			@Override
-//			public void onFocusChange(View v, boolean hasFocus) {
-//				LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���   
-//				linearParams.height = (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);// ���ؼ��ĸ�ǿ�����50����   
-//				et1.setLayoutParams(linearParams);
-//			}
-//		});
-//        
 
-		
+		iv_back = (ImageView) findViewById(R.id.nm_iv_logo_back);
+
+		iv_send = (ImageView) findViewById(R.id.nm_iv_send);
+
+		// et1.setOnFocusChangeListener(new OnFocusChangeListener() {
+		//
+		// @Override
+		// public void onFocusChange(View v, boolean hasFocus) {
+		// LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)
+		// et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���
+		// linearParams.height =
+		// (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);//
+		// ���ؼ��ĸ�ǿ�����50����
+		// et1.setLayoutParams(linearParams);
+		// }
+		// });
+		//
+
 		iv_back.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
 		});
-		
+
 		iv_send.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String stock = actx.getText().toString();
-				if(!stock.equals("")){
+				if (!stock.equals("")) {
 					value = et1.getText().toString();
-					if(!value.equals("")){
-					String content="";
-					try {
-						content = URLEncoder.encode(et1.getText().toString(),"UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					createMicropostNet(serUrl+"new_micropost_json?uid="
-							+ uid + "&&content=" + content + "&&stock=" + stock+"&&token="
-							+token);}
-					else {
+					if (!value.equals("")) {
+						String content = "";
+						try {
+							content = URLEncoder.encode(et1.getText()
+									.toString(), "UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						createMicropostNet(serUrl + "new_micropost_json?uid="
+								+ uid + "&&content=" + content + "&&stock="
+								+ stock + "&&token=" + token);
+					} else {
 						showInfo("匿名信息为必填~");
 					}
-				}else{
+				} else {
 					showInfo("股票代码为必填~");
 				}
-				
+
 			}
 		});
 
@@ -187,8 +198,13 @@ public class NewMicropostAty extends ActionBarActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				checkstock(serUrl+"stock_json?code="
-						+ s.toString() + "&maxRows=10");
+				try {
+					checkstock(serUrl + "stock_json?code="
+							+ URLEncoder.encode(s.toString(), "UTF-8")
+							+ "&maxRows=10");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 			}
 
 			@Override
@@ -206,65 +222,73 @@ public class NewMicropostAty extends ActionBarActivity {
 		});
 
 	}
-	
-	Handler handler=new Handler(){
+
+	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) et1.getLayoutParams();
+			LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) et1
+					.getLayoutParams();
 			switch (msg.what) {
 			case BIGGER:
-				linearParams.height = (int)(getApplicationContext().getResources().getDisplayMetrics().density*300+0.5f);// ���ؼ��ĸ�ǿ�����50����   
+				linearParams.height = (int) (getApplicationContext()
+						.getResources().getDisplayMetrics().density * 300 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
 				et1.setLayoutParams(linearParams);
 				break;
 
 			case SMALLER:
-				linearParams.height = (int)(getApplicationContext().getResources().getDisplayMetrics().density*220+0.5f);// ���ؼ��ĸ�ǿ�����50����   
+				linearParams.height = (int) (getApplicationContext()
+						.getResources().getDisplayMetrics().density * 220 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
 				et1.setLayoutParams(linearParams);
+				break;
+				
+			case NOT_RIGHT_STOCK_FORMAT:
+				actx.setText("");
+				showInfo("请输入股票代码或者股票名称！");
 				break;
 			}
 		}
 	};
 
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		MenuInflater inflater = getMenuInflater();
-//		inflater.inflate(R.menu.new_micropost, menu);
-//		return super.onCreateOptionsMenu(menu);
-//	}
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case android.R.id.home:
-//			finish();
-//			break;
-//
-//		case R.id.nm_send:
-//			value = et1.getText().toString();
-//			String content = et1.getText().toString();
-//			String stock = actx.getText().toString();
-//			// stock_id=sidList.get(stockList.indexOf(ac));
-//			createMicropostNet(serUrl+"new_micropost_json?uid="
-//					+ uid + "&&content=" + content + "&&stock=" + stock+"&&token="
-//					+token);
-//
-//			break;
-//		default:
-//			break;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
-//
-//	private void setOverflownoShowingAlways() {
-//		try {
-//			ViewConfiguration config = ViewConfiguration.get(this);
-//			Field menuKeyField = ViewConfiguration.class
-//					.getDeclaredField("sHasPermanentMenuKey");
-//			menuKeyField.setAccessible(true);
-//			menuKeyField.setBoolean(config, true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// MenuInflater inflater = getMenuInflater();
+	// inflater.inflate(R.menu.new_micropost, menu);
+	// return super.onCreateOptionsMenu(menu);
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case android.R.id.home:
+	// finish();
+	// break;
+	//
+	// case R.id.nm_send:
+	// value = et1.getText().toString();
+	// String content = et1.getText().toString();
+	// String stock = actx.getText().toString();
+	// // stock_id=sidList.get(stockList.indexOf(ac));
+	// createMicropostNet(serUrl+"new_micropost_json?uid="
+	// + uid + "&&content=" + content + "&&stock=" + stock+"&&token="
+	// +token);
+	//
+	// break;
+	// default:
+	// break;
+	// }
+	// return super.onOptionsItemSelected(item);
+	// }
+	//
+	// private void setOverflownoShowingAlways() {
+	// try {
+	// ViewConfiguration config = ViewConfiguration.get(this);
+	// Field menuKeyField = ViewConfiguration.class
+	// .getDeclaredField("sHasPermanentMenuKey");
+	// menuKeyField.setAccessible(true);
+	// menuKeyField.setBoolean(config, true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	public void createMicropostNet(String url) {
 
@@ -320,14 +344,20 @@ public class NewMicropostAty extends ActionBarActivity {
 					HttpResponse response = client.execute(get);
 					value = EntityUtils.toString(response.getEntity());
 
-					JSONArray result = new JSONArray(value);
-					stockList.clear();
-					sidList.clear();
-					for (int i = 0; i < result.length(); i++) {
-						JSONObject item = result.getJSONObject(i);
-						stockList.add(item.getString("code").toString() + ","
-								+ item.getString("name").toString());
-						sidList.add(item.getString("id").toString());
+					if ("[]".equals(value)) {
+					   Message msg=new Message();
+					   msg.what=NOT_RIGHT_STOCK_FORMAT;
+					   handler.sendMessage(msg);
+					} else {
+						JSONArray result = new JSONArray(value);
+						stockList.clear();
+						sidList.clear();
+						for (int i = 0; i < result.length(); i++) {
+							JSONObject item = result.getJSONObject(i);
+							stockList.add(item.getString("code").toString()
+									+ "," + item.getString("name").toString());
+							sidList.add(item.getString("id").toString());
+						}
 					}
 
 				} catch (ClientProtocolException e) {
@@ -354,6 +384,8 @@ public class NewMicropostAty extends ActionBarActivity {
 
 	}
 	
+	
+
 	public void showInfo(String info) {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)
 				.show();
