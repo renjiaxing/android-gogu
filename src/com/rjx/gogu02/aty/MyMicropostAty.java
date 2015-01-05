@@ -14,19 +14,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewPager.LayoutParams;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,8 +39,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.rjx.gogu02.R;
-import com.rjx.gogu02.R.id;
-import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.adapter.MicropostsAdapter;
 import com.rjx.gogu02.domain.Micropost;
 import com.rjx.gogu02.utils.ConstantValue;
@@ -85,7 +82,8 @@ public class MyMicropostAty extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-//				Intent it=new Intent(MyMicropostAty.this, MainActivity.class);
+				Intent it=new Intent(MyMicropostAty.this, MainActivity.class);
+				startActivity(it);
 				MyMicropostAty.this.finish();
 			}
 		});
@@ -207,7 +205,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -233,7 +232,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -259,7 +259,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -293,4 +294,36 @@ public class MyMicropostAty extends Activity {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)
 				.show();
 	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent it=new Intent(MyMicropostAty.this, MainActivity.class);
+		startActivity(it);
+		MyMicropostAty.this.finish();
+		super.onBackPressed();
+	}
+//	
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		 switch (item.getItemId()) {
+//		    // Respond to the action bar's Up/Home button
+//		    case android.R.id.home:
+//		        Intent upIntent = NavUtils.getParentActivityIntent(this);
+//		        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+//		            // This activity is NOT part of this app's task, so create a new task
+//		            // when navigating up, with a synthesized back stack.
+//		            TaskStackBuilder.create(this)
+//		                    // Add all of this activity's parents to the back stack
+//		                    .addNextIntentWithParentStack(upIntent)
+//		                    // Navigate up to the closest parent
+//		                    .startActivities();
+//		        } else {
+//		            // This activity is part of this app's task, so simply
+//		            // navigate up to the logical parent activity.
+//		            NavUtils.navigateUpTo(this, upIntent);
+//		        }
+//		        return true;
+//		    }
+//		    return super.onOptionsItemSelected(item);
+//	}
 }

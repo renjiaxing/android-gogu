@@ -14,15 +14,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewPager.LayoutParams;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -77,17 +81,12 @@ public class MyChatAty extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				Intent it=new Intent(MyChatAty.this, MainActivity.class);
+				startActivity(it);
 				finish();
 			}
 		});
 		
-//		chatUsers.add("1");
-//		chatUsers.add("2");
-//		chatUsers.add("3");
-//		
-//		toUsers.add("1");
-//		toUsers.add("2");
-//		toUsers.add("3");
 
 		ListView u_lv = (ListView) findViewById(R.id.my_chat_lv);
 		mAdapter = new MyChatAdapter(chatUsers, toUsers,unRead, this, user_id);
@@ -174,5 +173,36 @@ public class MyChatAty extends Activity {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)
 				.show();
 	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent it=new Intent(MyChatAty.this, MainActivity.class);
+		startActivity(it);
+		finish();
+		super.onBackPressed();
+	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		 switch (item.getItemId()) {
+//		    // Respond to the action bar's Up/Home button
+//		    case android.R.id.home:
+//		        Intent upIntent = NavUtils.getParentActivityIntent(this);
+//		        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+//		            // This activity is NOT part of this app's task, so create a new task
+//		            // when navigating up, with a synthesized back stack.
+//		            TaskStackBuilder.create(this)
+//		                    // Add all of this activity's parents to the back stack
+//		                    .addNextIntentWithParentStack(upIntent)
+//		                    // Navigate up to the closest parent
+//		                    .startActivities();
+//		        } else {
+//		            // This activity is part of this app's task, so simply
+//		            // navigate up to the logical parent activity.
+//		            NavUtils.navigateUpTo(this, upIntent);
+//		        }
+//		        return true;
+//		    }
+//		    return super.onOptionsItemSelected(item);
+//	}
 
 }

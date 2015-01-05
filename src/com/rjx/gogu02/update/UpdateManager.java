@@ -44,7 +44,7 @@ public class UpdateManager {
 	private Context mContext;
 
 	// 提示语
-	private String updateMsg = "有最新的软件包哦，亲快下载吧~";
+	private String updateMsg = "有最新的软件包哦，修正了一下bug，请快下载吧~";
 
 	// 返回的安装包url
 	

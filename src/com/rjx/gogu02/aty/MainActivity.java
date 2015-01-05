@@ -27,8 +27,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.jauker.widget.BadgeView;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.adapter.MicropostsAdapter;
 import com.rjx.gogu02.domain.Micropost;
@@ -61,8 +64,9 @@ public class MainActivity extends ActionBarActivity {
 	private ArrayAdapter<String> adapter;
 	private ArrayList<String> mAllList = new ArrayList<String>();
 	private String serUrl=ConstantValue.SERVER_URL;
-	private ImageView mychat_iv;
+	private ImageView mychat_iv,reply_iv;
 	private ArrayList<String> unreadList=new ArrayList<String>();
+	private BadgeView badge,badge2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +97,21 @@ public class MainActivity extends ActionBarActivity {
 						LayoutParams.WRAP_CONTENT));
 
 		final ImageView iv_search = (ImageView) findViewById(R.id.mn_search);
+		
+		reply_iv=(ImageView) findViewById(R.id.mn_my_microposts);
+		
+		reply_iv.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent it=new Intent(MainActivity.this, MyMicropostAty.class);
+				startActivity(it);	
+				finish();
+			}
+		});
+			
+		badge= new BadgeView(MainActivity.this);
+		badge2= new BadgeView(MainActivity.this);
 
 		iv_search.setOnClickListener(new OnClickListener() {
 
@@ -113,15 +132,6 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 		
-		ImageView iv_mychat=(ImageView) findViewById(R.id.mn_mychat);
-		
-		iv_mychat.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-			}
-		});
 
 		final ImageView iv_more = (ImageView) findViewById(R.id.mn_more);
 
@@ -147,11 +157,14 @@ public class MainActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				Intent it=new Intent(MainActivity.this, MyChatAty.class);
 				startActivity(it);
+				finish();
 			}
 		});
+		
+		
 
 		readNet(serUrl+"microposts_json?uid=" + user_id
-				+ "&&token=" + token, 0);
+				+ "&token=" + token, 0);
 //		System.out.println("bbb");
 //		System.out.println(mListItems);
 
@@ -290,17 +303,43 @@ public class MainActivity extends ActionBarActivity {
 			switch (msg.what) {
 			case 0:
 				try {
+					
+
 					JSONObject result=new JSONObject(value.toString());
 					JSONArray arr =new JSONArray(result.getString("microposts"));
-					String msgunread=result.getString("unreadnum");
+					String msgunread=result.getString("unreadnum");	
 					
 					if(msgunread.equals("0")){
+//						badge.setVisibility(View.GONE);
 						mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
 								R.drawable.ic_action_chat));
 					}else{
 						mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
 								R.drawable.ic_action_chat_unread));
+//						badge.setTargetView(mychat_iv);
+//						badge.setVisibility(View.VISIBLE);
+//						badge.setBadgeCount(Integer.parseInt(msgunread));
+						
+						
 					}
+					
+					String microunread=result.getString("unreadmicro");
+					
+					if(microunread.equals("0")){
+//						badge2.setVisibility(View.GONE);
+						reply_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
+								R.drawable.ic_card_conversation_grey));
+					}else{
+						reply_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
+								R.drawable.ic_card_conversation_grey_new));
+//						badge2.setTargetView(reply_iv);
+//						badge2.setVisibility(View.VISIBLE);
+//						badge2.setBadgeCount(Integer.parseInt(microunread));
+						
+						
+					}
+					
+					
 
 					max = arr.getJSONObject(0).getString("id");
 					min = arr.getJSONObject(arr.length() - 1).getString("id");
@@ -317,7 +356,8 @@ public class MainActivity extends ActionBarActivity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(tmp);
 					}
 
@@ -336,12 +376,35 @@ public class MainActivity extends ActionBarActivity {
 					String msgunread=result.getString("unreadnum");
 					
 					if(msgunread.equals("0")){
+//						badge.setVisibility(View.GONE);
 						mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
 								R.drawable.ic_action_chat));
 					}else{
 						mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
 								R.drawable.ic_action_chat_unread));
+//						badge.setTargetView(mychat_iv);
+//						badge.setVisibility(View.VISIBLE);
+//						badge.setBadgeCount(Integer.parseInt(msgunread));
+						
+						
 					}
+					
+					String microunread=result.getString("unreadmicro");
+					
+					if(microunread.equals("0")){
+//						badge2.setVisibility(View.GONE);
+						reply_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
+								R.drawable.ic_card_conversation_grey));
+					}else{
+						reply_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
+								R.drawable.ic_card_conversation_grey_new));
+//						badge2.setTargetView(reply_iv);
+//						badge2.setVisibility(View.VISIBLE);
+//						badge2.setBadgeCount(Integer.parseInt(microunread));
+						
+						
+					}
+					
 
 					max = arr.getJSONObject(0).getString("id");
 
@@ -355,7 +418,8 @@ public class MainActivity extends ActionBarActivity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -371,12 +435,35 @@ public class MainActivity extends ActionBarActivity {
 					String msgunread=result.getString("unreadnum");
 					
 					if(msgunread.equals("0")){
-						mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
-								R.drawable.ic_action_chat));
+						badge.setVisibility(View.GONE);
+//						mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
+//								R.drawable.ic_action_chat));
 					}else{
 						mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
 								R.drawable.ic_action_chat_unread));
+//						badge.setTargetView(mychat_iv);
+//						badge.setVisibility(View.VISIBLE);
+//						badge.setBadgeCount(Integer.parseInt(msgunread));
+						
+						
 					}
+					
+					String microunread=result.getString("unreadmicro");
+					
+					if(microunread.equals("0")){
+//						badge2.setVisibility(View.GONE);
+						reply_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
+								R.drawable.ic_card_conversation_grey));
+					}else{
+						reply_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
+								R.drawable.ic_card_conversation_grey_new));
+//						badge2.setTargetView(reply_iv);
+//						badge2.setVisibility(View.VISIBLE);
+//						badge2.setBadgeCount(Integer.parseInt(microunread));
+						
+						
+					}
+					
 
 					min = arr.getJSONObject(arr.length() - 1).getString("id");
 
@@ -390,7 +477,8 @@ public class MainActivity extends ActionBarActivity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();

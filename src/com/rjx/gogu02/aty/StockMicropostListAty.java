@@ -211,7 +211,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -237,7 +238,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -263,7 +265,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("comment_number"),
 								obj.getString("good"),
 								obj.getString("good_number"),
-								obj.getString("created_at"));
+								obj.getString("created_at"),
+								obj.getString("unread"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();

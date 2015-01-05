@@ -15,11 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,12 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.rjx.gogu02.R;
-import com.rjx.gogu02.R.id;
-import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
-import com.tencent.bugly.proguard.v;
 
 public class NewMicropostAty extends ActionBarActivity {
 

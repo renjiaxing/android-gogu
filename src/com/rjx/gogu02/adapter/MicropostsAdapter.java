@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.jauker.widget.BadgeView;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.R.drawable;
 import com.rjx.gogu02.R.id;
@@ -61,6 +62,7 @@ public class MicropostsAdapter extends BaseAdapter {
 	private String serUrl = ConstantValue.SERVER_URL;
 	private Handler handler;
 	private ArrayList<String> unreadList;
+	private BadgeView badgeView;
 
 	// private ImageView iv_good;
 
@@ -101,7 +103,7 @@ public class MicropostsAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LinearLayout ll = null;
 		if (convertView != null) {
-			ll = (LinearLayout) convertView;
+			ll = (LinearLayout) convertView;			
 		} else {
 			ll = (LinearLayout) LayoutInflater.from(context).inflate(
 					R.layout.item_cell, null);
@@ -110,7 +112,7 @@ public class MicropostsAdapter extends BaseAdapter {
 		LinearLayout llp = (LinearLayout) ll.findViewById(R.id.ic_tv_ll);
 		final TextView tv_content = (TextView) ll
 				.findViewById(R.id.ic_tv_content);
-		TextView idtv = (TextView) ll.findViewById(R.id.id_text);
+//		TextView idtv = (TextView) ll.findViewById(R.id.id_text);
 		final TextView tv_stock = (TextView) ll.findViewById(R.id.ic_tv_stock);
 		final ImageView iv_good = (ImageView) ll.findViewById(R.id.ic_iv_good);
 
@@ -124,7 +126,7 @@ public class MicropostsAdapter extends BaseAdapter {
 		client = new DefaultHttpClient();
 
 		final Micropost tmp = (Micropost) getItem(position);
-		idtv.setText(tmp.getId());
+//		idtv.setText(tmp.getId());
 		tv_content.setText(tmp.getContent());
 		tv_stock.setText(tmp.getStock_name());
 		tv_good_number.setText(tmp.getGood_number());
@@ -254,6 +256,21 @@ public class MicropostsAdapter extends BaseAdapter {
 				context.startActivity(it2);
 			}
 		});
+		
+		if(tmp.getUnread().equals("0")){
+//			badge2.setVisibility(View.GONE);
+			iv_comment.setImageDrawable(context.getResources().getDrawable(
+					R.drawable.ic_card_conversation_grey));
+		}else{
+			iv_comment.setImageDrawable(context.getResources().getDrawable(
+					R.drawable.ic_card_conversation_grey_new));
+//			badge2.setTargetView(reply_iv);
+//			badge2.setVisibility(View.VISIBLE);
+//			badge2.setBadgeCount(Integer.parseInt(microunread));
+			
+			
+		}
+		
 
 		return ll;
 	}

@@ -10,10 +10,11 @@ public class Micropost {
 	private String good;
 	private String good_number;
 	private String create_time;
+	private String unread;
 
 
 	public Micropost(String id, String content, String user_id,
-			String stock_id, String stock_name, String comment_size, String good,String good_number,String create_at) {
+			String stock_id, String stock_name, String comment_size, String good,String good_number,String create_at,String unread) {
 		this.id = id;
 		this.content = content;
 		this.user_id = user_id;
@@ -23,6 +24,17 @@ public class Micropost {
 		this.good =good;
 		this.good_number=good_number;
 		this.create_time=create_at;
+		this.unread=unread;
+	}
+
+
+	public String getUnread() {
+		return unread;
+	}
+
+
+	public void setUnread(String unread) {
+		this.unread = unread;
 	}
 
 

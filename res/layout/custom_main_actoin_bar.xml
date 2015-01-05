@@ -42,6 +42,14 @@
         android:src="@drawable/ic_action_my_chat" />
 
     <ImageView
+        android:id="@+id/mn_my_microposts"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:background="@drawable/mychangecolor"
+        android:src="@drawable/ic_card_conversation_grey" />
+
+    <ImageView
         android:id="@+id/mn_more"
         android:layout_width="0dp"
         android:layout_height="match_parent"
