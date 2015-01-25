@@ -1,12 +1,12 @@
 package com.rjx.gogu02.update;
 
-import java.io.File;  
-import java.io.FileOutputStream;  
-import java.io.IOException;  
-import java.io.InputStream;  
-import java.net.HttpURLConnection;  
-import java.net.MalformedURLException;  
-import java.net.URL;  
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -17,26 +17,29 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
+
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.utils.ConstantValue;
-  
-  
-import android.app.AlertDialog;  
-import android.app.Dialog;  
-import android.app.AlertDialog.Builder;  
-import android.content.Context;  
-import android.content.DialogInterface;  
-import android.content.Intent;  
-import android.content.DialogInterface.OnClickListener;  
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;  
-import android.os.AsyncTask;
-import android.os.Handler;  
-import android.os.Message;  
-import android.util.Log;
-import android.view.LayoutInflater;  
-import android.view.View;  
-import android.widget.ProgressBar;  
 
 public class UpdateManager {
 	
@@ -72,6 +75,9 @@ public class UpdateManager {
 	private Thread downLoadThread;
 
 	private boolean interceptFlag = false;
+	
+	private NotificationManager mNotifyManager;
+	private android.support.v4.app.NotificationCompat.Builder mBuilder;
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -166,11 +172,16 @@ public class UpdateManager {
 		AlertDialog.Builder builder = new Builder(mContext);
 		builder.setTitle("软件版本更新");
 		builder.setMessage(updateMsg);
-		builder.setPositiveButton("下载", new OnClickListener() {
+		builder.setPositiveButton("后台下载", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				showDownloadDialog();
+				mNotifyManager = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+				mBuilder = new NotificationCompat.Builder(mContext);
+//				String appName=mContext.getString(mContext.getApplicationInfo().labelRes);
+//				int icon=mContext.getApplicationInfo().icon;
+				mBuilder.setContentTitle("股刺网").setSmallIcon(R.drawable.logo28);
+				downloadApk();
 			}
 		});
 		builder.setNegativeButton("以后再说", new OnClickListener() {
@@ -233,11 +244,18 @@ public class UpdateManager {
 					int numread = is.read(buf);
 					count += numread;
 					progress = (int) (((float) count / length) * 100);
-					// 更新进度
-					mHandler.sendEmptyMessage(DOWN_UPDATE);
+					updateProgress(progress);
+//					mHandler.sendEmptyMessage(DOWN_UPDATE);
 					if (numread <= 0) {
 						// 下载完成通知安装
-						mHandler.sendEmptyMessage(DOWN_OVER);
+//						mHandler.sendEmptyMessage(DOWN_OVER);
+						mBuilder.setContentText("下载完毕~");
+						
+						Notification noti = mBuilder.build();
+						noti.flags = android.app.Notification.FLAG_AUTO_CANCEL;
+						mNotifyManager.notify(0, noti);
+						mNotifyManager.cancel(0);
+						installApk();
 						break;
 					}
 					fos.write(buf, 0, numread);
@@ -253,6 +271,15 @@ public class UpdateManager {
 
 		}
 	};
+	
+	private void updateProgress(int progress) {
+		//"正在下载:" + progress + "%"
+		mBuilder.setContentText("正在下载").setProgress(100, progress, false);
+		//setContentInent如果不设置在4.0+上没有问题，在4.0以下会报异常
+		PendingIntent pendingintent = PendingIntent.getActivity(mContext, 0, new Intent(), PendingIntent.FLAG_CANCEL_CURRENT);
+		mBuilder.setContentIntent(pendingintent);
+		mNotifyManager.notify(0, mBuilder.build());
+	}
 
 	/**
 	 * 下载apk

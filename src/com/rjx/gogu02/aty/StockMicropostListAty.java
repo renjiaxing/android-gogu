@@ -197,6 +197,8 @@ public class StockMicropostListAty extends Activity {
 				try {
 					JSONObject result=new JSONObject(value.toString());
 					JSONArray arr =new JSONArray(result.getString("microposts"));
+					
+					mListItems.clear();
 
 					max = arr.getJSONObject(0).getString("id");
 					min = arr.getJSONObject(arr.length() - 1).getString("id");
@@ -212,7 +214,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"));
+								obj.getString("unread"),
+								obj.getString("image"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -239,7 +242,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"));
+								obj.getString("unread"),
+								obj.getString("image"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -266,7 +270,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"));
+								obj.getString("unread"),
+								obj.getString("image"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();

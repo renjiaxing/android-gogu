@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.support.v7.app.ActionBarActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.adapter.CommentAdapter;
 import com.rjx.gogu02.domain.Comments;
 import com.rjx.gogu02.utils.ConstantValue;
+import com.rjx.gogu02.utils.ImageLoadTool;
 import com.rjx.gogu02.utils.NetworkResources;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
@@ -72,10 +75,14 @@ public class DetailsMicropostAty extends ActionBarActivity {
 	private static final int BIGGER = 1;
 	private static final int SMALLER = 2;
 	private int max = 0;
-	private String serUrl=ConstantValue.SERVER_URL;
+	private String serUrl = ConstantValue.SERVER_URL;
 	private IWXAPI wxapi;
-	final public static String APP_ID="wx93895a32017d8532";
+	final public static String APP_ID = "wx93895a32017d8532";
 	private String from_content;
+	private ImageView iv_image;
+	private ScrollView sc;
+	private String randint;
+	private String user_randint;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,8 @@ public class DetailsMicropostAty extends ActionBarActivity {
 
 		ImageView back = (ImageView) findViewById(R.id.common_logo_back);
 		ResizeLayout rl = (ResizeLayout) findViewById(R.id.dm_layout);
+		iv_image = (ImageView) findViewById(R.id.dm_iv_image);
+		sc=(ScrollView) findViewById(R.id.dm_sc);
 
 		rl.setOnResizeListener(new OnResizeListener() {
 
@@ -123,61 +132,62 @@ public class DetailsMicropostAty extends ActionBarActivity {
 				finish();
 			}
 		});
-		
-		wxapi=WXAPIFactory.createWXAPI(this, APP_ID);
+
+		wxapi = WXAPIFactory.createWXAPI(this, APP_ID);
 		wxapi.registerApp(APP_ID);
-		
-		ImageView weixin_iv=(ImageView) findViewById(R.id.dm_weixin);
-		
+
+		ImageView weixin_iv = (ImageView) findViewById(R.id.dm_weixin);
+
 		Button btn2 = (Button) findViewById(R.id.dm_btn2);
 		tv = (TextView) findViewById(R.id.dm_showText1);
+		tv.setMovementMethod(new ScrollingMovementMethod());
 		mListView = (ListView) findViewById(R.id.dm_listView1);
 
 		Bundle data = getIntent().getExtras();
 		mid = data.getString("mid");
-		from_content=data.getString("content");
+		from_content = data.getString("content");
 
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		uid = sp.getString("user_id", "");
 		token = sp.getString("token", "");
-
+		user_randint=sp.getString("randint", "");
 
 		weixin_iv.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				SendMessageToWX.Req req=new SendMessageToWX.Req();
-				req.transaction=""+System.currentTimeMillis();
-				WXWebpageObject webpage=new WXWebpageObject();
-				webpage.webpageUrl = serUrl+"microposts/"+mid+"/details";
-				req.scene=SendMessageToWX.Req.WXSceneSession;
-				req.message=new WXMediaMessage(webpage);
-				req.message.description=from_content;
-				req.message.title="股刺网";
-				
+				SendMessageToWX.Req req = new SendMessageToWX.Req();
+				req.transaction = "" + System.currentTimeMillis();
+				WXWebpageObject webpage = new WXWebpageObject();
+				webpage.webpageUrl = serUrl + "microposts/" + mid + "/details";
+				req.scene = SendMessageToWX.Req.WXSceneSession;
+				req.message = new WXMediaMessage(webpage);
+				req.message.description = from_content;
+				req.message.title = "股刺网";
+
 				wxapi.sendReq(req);
 			}
 		});
 
-		ImageView friend_iv=(ImageView) findViewById(R.id.dm_friends);
-		
+		ImageView friend_iv = (ImageView) findViewById(R.id.dm_friends);
+
 		friend_iv.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				SendMessageToWX.Req req=new SendMessageToWX.Req();
-				req.transaction=""+System.currentTimeMillis();
-				WXWebpageObject webpage=new WXWebpageObject();
-				webpage.webpageUrl = serUrl+"microposts/"+mid+"/details";
-				req.scene=SendMessageToWX.Req.WXSceneTimeline;
-				req.message=new WXMediaMessage(webpage);
-				req.message.description=from_content;
-				req.message.title="股刺网："+from_content;
-				
-				wxapi.sendReq(req);				
+				SendMessageToWX.Req req = new SendMessageToWX.Req();
+				req.transaction = "" + System.currentTimeMillis();
+				WXWebpageObject webpage = new WXWebpageObject();
+				webpage.webpageUrl = serUrl + "microposts/" + mid + "/details";
+				req.scene = SendMessageToWX.Req.WXSceneTimeline;
+				req.message = new WXMediaMessage(webpage);
+				req.message.description = from_content;
+				req.message.title = "股刺网：" + from_content;
+
+				wxapi.sendReq(req);
 			}
 		});
-		
+
 		btn2.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -194,28 +204,28 @@ public class DetailsMicropostAty extends ActionBarActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				DetailsMicropostNet(
-						serUrl+"new_comment_json?mid=" + mid
-								+ "&&msg=" + comment + "&&uid=" + uid
-								+ "&&token=" + token, 4);
-				 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+				DetailsMicropostNet(serUrl + "new_comment_json?mid=" + mid
+						+ "&&msg=" + comment + "&&uid=" + uid + "&&token="
+						+ token, 4);
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
 
 			}
 		});
 
 		client = new DefaultHttpClient();
 		mListItems = new ArrayList<Comments>();
-//		mAdapter = new ArrayAdapter<Comments>(this,
-//				android.R.layout.simple_list_item_1, mListItems);
-		mAdapter=new CommentAdapter(this, mListItems,uid,token,handler);
+		// mAdapter = new ArrayAdapter<Comments>(this,
+		// android.R.layout.simple_list_item_1, mListItems);
+		mAdapter = new CommentAdapter(this, mListItems, uid, token,user_randint, handler);
 		mListView.setAdapter(mAdapter);
 
-		DetailsMicropostNet(serUrl+"detail_micropost_json?mid="
-				+ mid + "&&uid=" + uid + "&&token=" + token, 3);
+		DetailsMicropostNet(serUrl + "detail_micropost_json?mid=" + mid
+				+ "&&uid=" + uid + "&&token=" + token, 3);
 
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		wxapi.unregisterApp();
@@ -279,26 +289,39 @@ public class DetailsMicropostAty extends ActionBarActivity {
 	Handler handler = new Handler() {
 
 		public void handleMessage(Message msg) {
-			LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) tv
-					.getLayoutParams();
+			
+//			LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) tv
+//					.getLayoutParams();
+			android.view.ViewGroup.LayoutParams lp=sc.getLayoutParams();
 			switch (msg.what) {
 			case BIGGER:
-				linearParams.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 250 + 0.5f);// 当控件的高强制设成50象素
-				tv.setLayoutParams(linearParams);
+				lp.height = (int) (getApplicationContext()
+						.getResources().getDisplayMetrics().density * 230 + 0.5f);// 当控件的高强制设成50象素
+				sc.setLayoutParams(lp);
 				break;
 
 			case SMALLER:
-				linearParams.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 220 + 0.5f);// 当控件的高强制设成50象素
-				tv.setLayoutParams(linearParams);
+				lp.height = (int) (getApplicationContext()
+						.getResources().getDisplayMetrics().density * 190 + 0.5f);// 当控件的高强制设成50象素
+				sc.setLayoutParams(lp);
 				break;
 
 			case 3:
 				try {
 					JSONObject con = new JSONObject(value.toString());
 					JSONArray arr = new JSONArray(con.getString("comments"));
+					randint=con.getString("randint");
 					tv.setText(con.getString("content"));
+					JSONObject imageObject = new JSONObject(
+							con.getString("image"));
+
+					if (!(imageObject.getString("url").equals("null"))) {
+						String url = ConstantValue.SERVER_URL
+								+ imageObject.getString("url").substring(1);
+						ImageLoadTool imageLoadTool = new ImageLoadTool();
+						imageLoadTool.loadImage(iv_image, url);
+					}
+
 					if (arr.length() >= 1) {
 						for (int i = 0; i < arr.length(); i++) {
 							JSONObject obj = arr.getJSONObject(i);
@@ -306,7 +329,8 @@ public class DetailsMicropostAty extends ActionBarActivity {
 									obj.getString("msg"),
 									obj.getString("user_id"),
 									obj.getString("anonid"),
-									obj.getString("created_at"));
+									obj.getString("created_at"),
+									randint);
 							mListItems.add(tmp);
 						}
 						mAdapter.notifyDataSetChanged();
@@ -332,7 +356,8 @@ public class DetailsMicropostAty extends ActionBarActivity {
 										obj.getString("msg"),
 										obj.getString("user_id"),
 										obj.getString("anonid"),
-										obj.getString("created_at"));
+										obj.getString("created_at"),
+										randint);
 								mListItems.add(tmp);
 							}
 							mAdapter.notifyDataSetChanged();
@@ -346,13 +371,14 @@ public class DetailsMicropostAty extends ActionBarActivity {
 				break;
 			case 12:
 				try {
-					JSONObject con = new JSONObject(msg.getData().getString("value").toString());
+					JSONObject con = new JSONObject(msg.getData()
+							.getString("value").toString());
 					if (con.getString("result").equals("ok")) {
 						JSONArray arr = new JSONArray(con.getString("comments"));
 
 						if (arr.length() >= 1) {
 							mListItems.clear();
-//							et.setText("");
+							// et.setText("");
 							for (int i = 0; i < arr.length(); i++) {
 								JSONObject obj = arr.getJSONObject(i);
 								Comments tmp = new Comments(
@@ -360,7 +386,8 @@ public class DetailsMicropostAty extends ActionBarActivity {
 										obj.getString("msg"),
 										obj.getString("user_id"),
 										obj.getString("anonid"),
-										obj.getString("created_at"));
+										obj.getString("created_at"),
+										randint);
 								mListItems.add(tmp);
 							}
 							mAdapter.notifyDataSetChanged();

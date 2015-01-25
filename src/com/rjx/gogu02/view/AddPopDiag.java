@@ -30,7 +30,7 @@ public class AddPopDiag extends PopupWindow {
 		contentView = inflater.inflate(R.layout.popup_main_more_diag, null);
 		int h = context.getWindowManager().getDefaultDisplay().getHeight();
 		int w = context.getWindowManager().getDefaultDisplay().getWidth();
-		sp=context.getSharedPreferences("login", context.MODE_PRIVATE);
+		sp=context.getSharedPreferences("login1", context.MODE_PRIVATE);
 
 		this.setContentView(contentView);
 		this.setWidth(w / 2 + 50);

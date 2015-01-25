@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.R.id;
 import com.rjx.gogu02.R.layout;
+import com.rjx.gogu02.service.NotificationService;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.utils.NetworkResources;
 
@@ -54,6 +55,9 @@ public class LoginAty extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.loginaty);
+		
+		Intent serIntent=new Intent(this, NotificationService.class);
+		startService(serIntent);
 		
 		getActionBar().setDisplayShowHomeEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(false);

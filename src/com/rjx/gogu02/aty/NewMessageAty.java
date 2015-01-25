@@ -50,6 +50,8 @@ public class NewMessageAty extends Activity {
 	private String value = "";
 	private String serUrl = ConstantValue.SERVER_URL;
 	private EditText msg_et;
+	private Integer pic_id;
+	private Integer rand_id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class NewMessageAty extends Activity {
 
 		Bundle bl = getIntent().getExtras();
 		to_uid = bl.getString("uid", "");
+		rand_id=bl.getInt("rand_id",0);
 
 		client = new DefaultHttpClient();
 
@@ -82,7 +85,7 @@ public class NewMessageAty extends Activity {
 		Button send_btn = (Button) findViewById(R.id.nmessage_send);
 
 		messageList = new ArrayList<Msg>();
-		mAdapter = new MessageAdapter(messageList, this, user_id);
+		mAdapter = new MessageAdapter(messageList, this, user_id,rand_id);
 		msg_lv.setAdapter(mAdapter);
 
 		NewMessageNet(serUrl + "messages_json?uid=" + user_id + "&token="

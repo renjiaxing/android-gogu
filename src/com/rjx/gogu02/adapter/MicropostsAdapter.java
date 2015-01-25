@@ -14,6 +14,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jauker.widget.BadgeView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.R.drawable;
 import com.rjx.gogu02.R.id;
@@ -23,6 +27,7 @@ import com.rjx.gogu02.aty.DetailsMicropostAty;
 import com.rjx.gogu02.aty.LoginAty;
 import com.rjx.gogu02.aty.MainActivity;
 import com.rjx.gogu02.aty.NewMessageAty;
+import com.rjx.gogu02.aty.PicDetailAty;
 import com.rjx.gogu02.aty.StockMicropostListAty;
 import com.rjx.gogu02.domain.Micropost;
 import com.rjx.gogu02.utils.ConstantValue;
@@ -33,6 +38,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,17 +69,31 @@ public class MicropostsAdapter extends BaseAdapter {
 	private Handler handler;
 	private ArrayList<String> unreadList;
 	private BadgeView badgeView;
+	
+	ImageLoader imageLoader = ImageLoader.getInstance();
+
+	public static DisplayImageOptions options = new DisplayImageOptions.Builder()
+			// .showImageOnLoading(R.drawable.ic_default_user)
+			// .showImageForEmptyUri(R.drawable.ic_default_user)
+			// .showImageOnFail(R.drawable.ic_default_user)
+			.cacheInMemory(true).cacheOnDisk(true).considerExifParams(true)
+			.build();
+
+	public void loadImage(ImageView imageView, String url) {
+		imageLoader.displayImage(url, imageView, options);
+	}
 
 	// private ImageView iv_good;
 
 	public MicropostsAdapter(Context context, ArrayList<Micropost> arrayList,
-			 ArrayList<String> unreadString,String token, String currentUser, Handler handler) {
+			ArrayList<String> unreadString, String token, String currentUser,
+			Handler handler) {
 		this.context = context;
 		this.arrayList = arrayList;
 		this.token = token;
 		this.currentUser = currentUser;
 		this.handler = handler;
-		this.unreadList=unreadList;
+		this.unreadList = unreadList;
 	}
 
 	public Context getContext() {
@@ -102,8 +122,13 @@ public class MicropostsAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LinearLayout ll = null;
-		if (convertView != null) {
-			ll = (LinearLayout) convertView;			
+		if (arrayList.size() > 6) {
+			if (convertView != null) {
+				ll = (LinearLayout) convertView;
+			} else {
+				ll = (LinearLayout) LayoutInflater.from(context).inflate(
+						R.layout.item_cell, null);
+			}
 		} else {
 			ll = (LinearLayout) LayoutInflater.from(context).inflate(
 					R.layout.item_cell, null);
@@ -112,7 +137,7 @@ public class MicropostsAdapter extends BaseAdapter {
 		LinearLayout llp = (LinearLayout) ll.findViewById(R.id.ic_tv_ll);
 		final TextView tv_content = (TextView) ll
 				.findViewById(R.id.ic_tv_content);
-//		TextView idtv = (TextView) ll.findViewById(R.id.id_text);
+		// TextView idtv = (TextView) ll.findViewById(R.id.id_text);
 		final TextView tv_stock = (TextView) ll.findViewById(R.id.ic_tv_stock);
 		final ImageView iv_good = (ImageView) ll.findViewById(R.id.ic_iv_good);
 
@@ -126,14 +151,15 @@ public class MicropostsAdapter extends BaseAdapter {
 		client = new DefaultHttpClient();
 
 		final Micropost tmp = (Micropost) getItem(position);
-//		idtv.setText(tmp.getId());
+		// idtv.setText(tmp.getId());
 		tv_content.setText(tmp.getContent());
 		tv_stock.setText(tmp.getStock_name());
 		tv_good_number.setText(tmp.getGood_number());
 		tv_comment_number.setText(tmp.getComment_size());
 		ImageView iv_del = (ImageView) ll.findViewById(R.id.ic_iv_del);
 		ImageView iv_change = (ImageView) ll.findViewById(R.id.ic_iv_change);
-		ImageView iv_msg=(ImageView) ll.findViewById(R.id.ic_iv_msg);
+		ImageView iv_msg = (ImageView) ll.findViewById(R.id.ic_iv_msg);
+		final ImageView iv_image=(ImageView) ll.findViewById(R.id.ic_iv_image);
 
 		if (currentUser.equals(tmp.getUser_id())) {
 			iv_del.setVisibility(ViewGroup.VISIBLE);
@@ -147,17 +173,17 @@ public class MicropostsAdapter extends BaseAdapter {
 			});
 			iv_change.setVisibility(ViewGroup.VISIBLE);
 			iv_change.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					Bundle bl=new Bundle();
+					Bundle bl = new Bundle();
 					bl.putString("content", tmp.getContent());
 					bl.putString("mid", tmp.getId());
-					Intent it=new Intent(context, ChangeMicropostAty.class);
+					Intent it = new Intent(context, ChangeMicropostAty.class);
 					it.putExtras(bl);
 					context.startActivity(it);
-//					((Activity) context).finish();
-					
+					// ((Activity) context).finish();
+
 				}
 			});
 		} else {
@@ -220,7 +246,7 @@ public class MicropostsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				String id_st = tmp.getId();
-				String id_content=tmp.getContent();
+				String id_content = tmp.getContent();
 				Bundle data = new Bundle();
 				data.putString("mid", id_st);
 				data.putString("content", id_content);
@@ -235,7 +261,7 @@ public class MicropostsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				String id_st = tmp.getId();
-				String id_content=tmp.getContent();
+				String id_content = tmp.getContent();
 				Bundle data = new Bundle();
 				data.putString("content", id_content);
 				data.putString("mid", id_st);
@@ -244,33 +270,61 @@ public class MicropostsAdapter extends BaseAdapter {
 				context.startActivity(it2);
 			}
 		});
-		
+
 		iv_msg.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				Bundle bl=new Bundle();
+				Bundle bl = new Bundle();
 				bl.putString("uid", tmp.getUser_id());
-				Intent it2=new Intent(context, NewMessageAty.class);
+				Intent it2 = new Intent(context, NewMessageAty.class);
 				it2.putExtras(bl);
 				context.startActivity(it2);
 			}
 		});
 		
-		if(tmp.getUnread().equals("0")){
-//			badge2.setVisibility(View.GONE);
-			iv_comment.setImageDrawable(context.getResources().getDrawable(
-					R.drawable.ic_card_conversation_grey));
-		}else{
-			iv_comment.setImageDrawable(context.getResources().getDrawable(
-					R.drawable.ic_card_conversation_grey_new));
-//			badge2.setTargetView(reply_iv);
-//			badge2.setVisibility(View.VISIBLE);
-//			badge2.setBadgeCount(Integer.parseInt(microunread));
+		iv_image.setVisibility(View.GONE);
+		
+		if(!(tmp.getImage().equals(""))){
+			iv_image.setVisibility(View.VISIBLE);
+			ImageSize targetSize = new ImageSize(300, 350);
+			final String url=ConstantValue.SERVER_URL+tmp.getImage().substring(1);
+			imageLoader.loadImage(url, targetSize, options, new SimpleImageLoadingListener(){
+				@Override
+				public void onLoadingComplete(String imageUri, View view,
+						Bitmap loadedImage) {
+					iv_image.setImageBitmap(loadedImage);
+//					super.onLoadingComplete(imageUri, view, loadedImage);
+				}
+			});
 			
-			
+			iv_image.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Bundle bd=new Bundle();
+					bd.putString("url", url);
+					Intent it=new Intent(context, PicDetailAty.class);
+					it.putExtra("pic", bd);
+					context.startActivity(it);
+				}
+			});
 		}
 		
+		
+
+		if (tmp.getUnread().equals("0")) {
+			// badge2.setVisibility(View.GONE);
+			iv_comment.setImageDrawable(context.getResources().getDrawable(
+					R.drawable.reply30));
+		} else {
+			iv_comment.setImageDrawable(context.getResources().getDrawable(
+					R.drawable.reply30un));
+			// badge2.setTargetView(reply_iv);
+			// badge2.setVisibility(View.VISIBLE);
+			// badge2.setBadgeCount(Integer.parseInt(microunread));
+
+		}
 
 		return ll;
 	}
@@ -288,7 +342,7 @@ public class MicropostsAdapter extends BaseAdapter {
 
 				Message msg = new Message();
 				msg.what = mod;
-				Bundle bl2=new Bundle();
+				Bundle bl2 = new Bundle();
 
 				try {
 					HttpResponse response = client.execute(get);

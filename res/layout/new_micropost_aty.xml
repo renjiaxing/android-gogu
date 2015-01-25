@@ -9,8 +9,10 @@
         android:id="@+id/nm_editText1"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_gravity="center"
         android:background="@color/gogu_green"
         android:ems="10"
+        android:gravity="center"
         android:hint="匿名发表信息"
         android:inputType="textMultiLine"
         android:padding="40dp"
@@ -20,15 +22,26 @@
         android:id="@+id/nm_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <AutoCompleteTextView
             android:id="@+id/nm_auto"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="请输入股票代码"
-            android:textColor="@color/bl" >
+            android:textColor="@color/bl"
+            android:textSize="25sp" >
         </AutoCompleteTextView>
+
+        <ImageView
+            android:id="@+id/nm_iv_addpic"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.2"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/pic_add" />
     </LinearLayout>
 
 </com.rjx.gogu02.view.ResizeLayout>

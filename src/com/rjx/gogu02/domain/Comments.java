@@ -7,14 +7,24 @@ public class Comments {
 	private String user_id;
 	private String anon_id;
 	private String create_time;
+	private String randint;
 
 	public Comments(String id, String msg, String user_id, String anon_id,
-			String create_time) {
+			String create_time,String randint) {
 		this.id = id;
 		this.msg = msg;
 		this.user_id = user_id;
 		this.anon_id = anon_id;
 		this.create_time = create_time;
+		this.randint=randint;
+	}
+
+	public String getRandint() {
+		return randint;
+	}
+
+	public void setRandint(String randint) {
+		this.randint = randint;
 	}
 
 	@Override

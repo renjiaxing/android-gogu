@@ -27,6 +27,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 
 import com.rjx.gogu02.R;
+import com.rjx.gogu02.service.NotificationService;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.bugly.crashreport.CrashReport.UserStrategy;

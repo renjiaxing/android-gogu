@@ -91,6 +91,12 @@ public class MyMicropostAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
 		token = sp.getString("token", "");
+		
+		if(user_id.equals("")){
+			Intent back_it= new Intent(MyMicropostAty.this, LoginAty.class);
+			startActivity(back_it);
+			MyMicropostAty.this.finish();
+		}
 
 		client = new DefaultHttpClient();
 		mListItems = new ArrayList<Micropost>();
@@ -192,6 +198,8 @@ public class MyMicropostAty extends Activity {
 					JSONObject result=new JSONObject(value.toString());
 					JSONArray arr =new JSONArray(result.getString("microposts"));
 
+					mListItems.clear();
+					
 					max = arr.getJSONObject(0).getString("id");
 					min = arr.getJSONObject(arr.length() - 1).getString("id");
 
@@ -206,7 +214,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"));
+								obj.getString("unread"),
+								obj.getString("image"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -233,7 +242,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"));
+								obj.getString("unread"),
+								obj.getString("image"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -260,7 +270,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"));
+								obj.getString("unread"),
+								obj.getString("image"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();

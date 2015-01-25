@@ -1,10 +1,13 @@
 package com.rjx.gogu02.aty;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -17,8 +20,13 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +44,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.view.ResizeLayout;
@@ -62,9 +75,13 @@ public class NewMicropostAty extends ActionBarActivity {
 	private ImageView iv_send;
 	private static final int BIGGER = 1;
 	private static final int SMALLER = 2;
-	private static final int NOT_RIGHT_STOCK_FORMAT=3;
+	private static final int NOT_RIGHT_STOCK_FORMAT = 3;
 	private int max = 0;
 	private String serUrl = ConstantValue.SERVER_URL;
+	private ImageView iv_add_pic;
+	private Boolean hasPic = false;
+	private ImageLoader imageLoader = ImageLoader.getInstance();
+	private String url = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +106,31 @@ public class NewMicropostAty extends ActionBarActivity {
 
 		et1 = (EditText) findViewById(R.id.nm_editText1);
 		actx = (AutoCompleteTextView) findViewById(R.id.nm_auto);
+		iv_add_pic = (ImageView) findViewById(R.id.nm_iv_addpic);
 		ResizeLayout rl = (ResizeLayout) findViewById(R.id.nm_relative);
+
+		iv_add_pic.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (hasPic == false) {
+					Intent intent = new Intent();
+					// intent.setType("image/*");
+					// intent.setAction(Intent.ACTION_GET_CONTENT);
+					intent = new Intent(
+							Intent.ACTION_PICK,
+							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+					startActivityForResult(intent, 1);
+				} else {
+					Intent intent = new Intent(NewMicropostAty.this,
+							DelPicAty.class);
+					Bundle bd = new Bundle();
+					bd.putString("url", url);
+					intent.putExtra("pic", bd);
+					startActivityForResult(intent, 2);
+				}
+			}
+		});
 
 		// actx.setOnFocusChangeListener(new OnFocusChangeListener() {
 		//
@@ -175,9 +216,68 @@ public class NewMicropostAty extends ActionBarActivity {
 							e.printStackTrace();
 						}
 
-						createMicropostNet(serUrl + "new_micropost_json?uid="
-								+ uid + "&&content=" + content + "&&stock="
-								+ stock + "&&token=" + token);
+						// createMicropostNet(serUrl + "new_micropost_json?uid="
+						// + uid + "&&content=" + content + "&&stock="
+						// + stock + "&&token=" + token);
+						try {
+							RequestParams params = new RequestParams();
+							params.put("micropost[content]", content);
+							params.put("micropost[user_id]", uid);
+							params.put("micropost[stock_id]",
+									stock.split(",")[0]);
+							if (!(url.equals(""))) {
+								params.put("micropost[image]", new File(url));
+							}
+							AsyncHttpClient client = new AsyncHttpClient();
+							client.setTimeout(1000);
+							client.post(ConstantValue.SERVER_URL
+									+ "add_micropost_test_api/", params,
+									new JsonHttpResponseHandler() {
+										@Override
+										public void onSuccess(int statusCode,
+												Header[] headers,
+												JSONObject response) {
+											// TODO Auto-generated method stub
+											System.out.println("ok:"
+													+ statusCode + " "
+													+ headers.toString() + " "
+													+ response.toString());
+											super.onSuccess(statusCode,
+													headers, response);
+											try {
+												if (response
+														.getString("result")
+														.equals("ok")) {
+													finish();
+												} else {
+													showInfo("创建失败");
+												}
+											} catch (JSONException e) {
+												// TODO Auto-generated catch
+												// block
+												e.printStackTrace();
+											}
+										}
+
+										@Override
+										public void onFailure(int statusCode,
+												Header[] headers,
+												Throwable throwable,
+												JSONObject errorResponse) {
+											// TODO Auto-generated method stub
+											System.out.println("failed:aaaaa"
+													+ statusCode + " "
+													+ headers);
+											showInfo("创建失败");
+											// super.onFailure(statusCode,
+											// headers, throwable,
+											// errorResponse);
+										}
+									});
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					} else {
 						showInfo("匿名信息为必填~");
 					}
@@ -218,6 +318,35 @@ public class NewMicropostAty extends ActionBarActivity {
 
 	}
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1) {
+			if (resultCode == Activity.RESULT_OK) {
+				Uri uri = data.getData();
+				if (uri != null && "content".equals(uri.getScheme())) {
+                    Cursor cursor = this.getContentResolver().query(uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+                    cursor.moveToFirst();   
+                    url = cursor.getString(0);
+                    File f=new File(url);
+                    cursor.close();
+                }
+                else {
+                	url = uri.getPath();
+                }
+				ImageSize targetSize = new ImageSize(200, 250);
+				Bitmap bm = imageLoader.loadImageSync(data.getData().toString(), targetSize);
+				iv_add_pic.setImageBitmap(bm);
+				hasPic = true;
+			}
+		} else if (requestCode == 2) {
+			if (resultCode == Activity.RESULT_OK) {
+				url = "";
+				iv_add_pic.setImageDrawable(getResources().getDrawable(
+						R.drawable.pic_add));
+				hasPic = false;
+			}
+		}
+	};
+
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) et1
@@ -231,10 +360,10 @@ public class NewMicropostAty extends ActionBarActivity {
 
 			case SMALLER:
 				linearParams.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 220 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
+						.getResources().getDisplayMetrics().density * 210 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
 				et1.setLayoutParams(linearParams);
 				break;
-				
+
 			case NOT_RIGHT_STOCK_FORMAT:
 				actx.setText("");
 				showInfo("请输入股票代码或者股票名称！");
@@ -340,9 +469,9 @@ public class NewMicropostAty extends ActionBarActivity {
 					value = EntityUtils.toString(response.getEntity());
 
 					if ("[]".equals(value)) {
-					   Message msg=new Message();
-					   msg.what=NOT_RIGHT_STOCK_FORMAT;
-					   handler.sendMessage(msg);
+						Message msg = new Message();
+						msg.what = NOT_RIGHT_STOCK_FORMAT;
+						handler.sendMessage(msg);
 					} else {
 						JSONArray result = new JSONArray(value);
 						stockList.clear();
@@ -378,8 +507,6 @@ public class NewMicropostAty extends ActionBarActivity {
 		}.execute(url);
 
 	}
-	
-	
 
 	public void showInfo(String info) {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)

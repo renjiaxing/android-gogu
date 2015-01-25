@@ -43,6 +43,8 @@ public class MyChatAty extends Activity {
 	private ArrayList<String> chatUsers = new ArrayList<String>();
 	private ArrayList<String> toUsers = new ArrayList<String>();
 	private ArrayList<String> unRead = new ArrayList<String>();
+	private ArrayList<String> lastMsg=new ArrayList<String>();
+	private ArrayList<String> randint=new ArrayList<String>();
 	private HttpClient client;
 	private SharedPreferences sp;
 	private String user_id;
@@ -72,6 +74,12 @@ public class MyChatAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
 		token = sp.getString("token", "");
+		
+		if(user_id.equals("")){
+			Intent back_it= new Intent(MyChatAty.this, LoginAty.class);
+			startActivity(back_it);
+			finish();
+		}
 
 		client = new DefaultHttpClient();
 		
@@ -89,7 +97,7 @@ public class MyChatAty extends Activity {
 		
 
 		ListView u_lv = (ListView) findViewById(R.id.my_chat_lv);
-		mAdapter = new MyChatAdapter(chatUsers, toUsers,unRead, this, user_id);
+		mAdapter = new MyChatAdapter(chatUsers, toUsers,unRead,lastMsg,randint, this, user_id);
 		u_lv.setAdapter(mAdapter);
 
 		MyChatNet(serUrl + "message_user_json?uid=" + user_id + "&token="
@@ -149,12 +157,16 @@ public class MyChatAty extends Activity {
 					chatUsers.clear();
 					toUsers.clear();
 					unRead.clear();
+					lastMsg.clear();
+					randint.clear();
 					if (userArray.length() > 0) {
 						for (int i = 0; i < userArray.length(); i++) {
 							JSONObject obj = userArray.getJSONObject(i);
 							chatUsers.add(obj.getString("anon"));
 							toUsers.add(obj.getString("touser"));
 							unRead.add(obj.getString("unreadnum"));
+							lastMsg.add(obj.getString("msg"));
+							randint.add(obj.getString("randint"));
 						}
 						mAdapter.notifyDataSetChanged();
 					}

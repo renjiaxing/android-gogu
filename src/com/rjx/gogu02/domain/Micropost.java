@@ -11,42 +11,47 @@ public class Micropost {
 	private String good_number;
 	private String create_time;
 	private String unread;
-
+	private String image;
 
 	public Micropost(String id, String content, String user_id,
-			String stock_id, String stock_name, String comment_size, String good,String good_number,String create_at,String unread) {
+			String stock_id, String stock_name, String comment_size,
+			String good, String good_number, String create_at, String unread,String image) {
 		this.id = id;
 		this.content = content;
 		this.user_id = user_id;
 		this.stock_id = stock_id;
-		this.stock_name =stock_name;
-		this.comment_size=comment_size;
-		this.good =good;
-		this.good_number=good_number;
-		this.create_time=create_at;
-		this.unread=unread;
+		this.stock_name = stock_name;
+		this.comment_size = comment_size;
+		this.good = good;
+		this.good_number = good_number;
+		this.create_time = create_at;
+		this.unread = unread;
+		this.image=image;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	public String getUnread() {
 		return unread;
 	}
 
-
 	public void setUnread(String unread) {
 		this.unread = unread;
 	}
-
 
 	public String getCreate_time() {
 		return create_time;
 	}
 
-
 	public void setCreate_time(String create_time) {
 		this.create_time = create_time;
 	}
-
 
 	public String getGood_number() {
 		return good_number;
@@ -55,7 +60,7 @@ public class Micropost {
 	public void setGood_number(String good_number) {
 		this.good_number = good_number;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
