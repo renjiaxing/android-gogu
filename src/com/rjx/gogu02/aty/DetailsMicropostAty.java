@@ -77,7 +77,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 	private int max = 0;
 	private String serUrl = ConstantValue.SERVER_URL;
 	private IWXAPI wxapi;
-	final public static String APP_ID = "wx93895a32017d8532";
+	final public static String APP_ID = "wx184f80b52d0ec155";
 	private String from_content;
 	private ImageView iv_image;
 	private ScrollView sc;
@@ -103,7 +103,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 		ImageView back = (ImageView) findViewById(R.id.common_logo_back);
 		ResizeLayout rl = (ResizeLayout) findViewById(R.id.dm_layout);
 		iv_image = (ImageView) findViewById(R.id.dm_iv_image);
-		sc=(ScrollView) findViewById(R.id.dm_sc);
+		sc = (ScrollView) findViewById(R.id.dm_sc);
 
 		rl.setOnResizeListener(new OnResizeListener() {
 
@@ -150,7 +150,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		uid = sp.getString("user_id", "");
 		token = sp.getString("token", "");
-		user_randint=sp.getString("randint", "");
+		user_randint = sp.getString("randint", "");
 
 		weixin_iv.setOnClickListener(new OnClickListener() {
 
@@ -197,20 +197,24 @@ public class DetailsMicropostAty extends ActionBarActivity {
 				// et.getText().toString().replaceAll("(\r\n|\r|\n|\n\r)",
 				// "&lt;br&gt;");
 				String comment = "";
-				try {
-					comment = URLEncoder.encode(et.getText().toString(),
-							"UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (et.getText().toString().equals("")) {
+					showInfo("评论不能为空~");
+				} else {
+					try {
+						comment = URLEncoder.encode(et.getText().toString(),
+								"UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					DetailsMicropostNet(serUrl + "new_comment_json?mid=" + mid
+							+ "&&msg=" + comment + "&&uid=" + uid + "&&token="
+							+ token, 4);
+					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(getCurrentFocus()
+							.getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
 				}
-				DetailsMicropostNet(serUrl + "new_comment_json?mid=" + mid
-						+ "&&msg=" + comment + "&&uid=" + uid + "&&token="
-						+ token, 4);
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-
 			}
 		});
 
@@ -218,7 +222,8 @@ public class DetailsMicropostAty extends ActionBarActivity {
 		mListItems = new ArrayList<Comments>();
 		// mAdapter = new ArrayAdapter<Comments>(this,
 		// android.R.layout.simple_list_item_1, mListItems);
-		mAdapter = new CommentAdapter(this, mListItems, uid, token,user_randint, handler);
+		mAdapter = new CommentAdapter(this, mListItems, uid, token,
+				user_randint, handler);
 		mListView.setAdapter(mAdapter);
 
 		DetailsMicropostNet(serUrl + "detail_micropost_json?mid=" + mid
@@ -289,20 +294,21 @@ public class DetailsMicropostAty extends ActionBarActivity {
 	Handler handler = new Handler() {
 
 		public void handleMessage(Message msg) {
-			
-//			LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) tv
-//					.getLayoutParams();
-			android.view.ViewGroup.LayoutParams lp=sc.getLayoutParams();
+
+			// LinearLayout.LayoutParams linearParams =
+			// (LinearLayout.LayoutParams) tv
+			// .getLayoutParams();
+			android.view.ViewGroup.LayoutParams lp = sc.getLayoutParams();
 			switch (msg.what) {
 			case BIGGER:
-				lp.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 230 + 0.5f);// 当控件的高强制设成50象素
+				lp.height = (int) (getApplicationContext().getResources()
+						.getDisplayMetrics().density * 230 + 0.5f);// 当控件的高强制设成50象素
 				sc.setLayoutParams(lp);
 				break;
 
 			case SMALLER:
-				lp.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 190 + 0.5f);// 当控件的高强制设成50象素
+				lp.height = (int) (getApplicationContext().getResources()
+						.getDisplayMetrics().density * 190 + 0.5f);// 当控件的高强制设成50象素
 				sc.setLayoutParams(lp);
 				break;
 
@@ -310,7 +316,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 				try {
 					JSONObject con = new JSONObject(value.toString());
 					JSONArray arr = new JSONArray(con.getString("comments"));
-					randint=con.getString("randint");
+					randint = con.getString("randint");
 					tv.setText(con.getString("content"));
 					JSONObject imageObject = new JSONObject(
 							con.getString("image"));
@@ -329,8 +335,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 									obj.getString("msg"),
 									obj.getString("user_id"),
 									obj.getString("anonid"),
-									obj.getString("created_at"),
-									randint);
+									obj.getString("created_at"), randint);
 							mListItems.add(tmp);
 						}
 						mAdapter.notifyDataSetChanged();
@@ -356,8 +361,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 										obj.getString("msg"),
 										obj.getString("user_id"),
 										obj.getString("anonid"),
-										obj.getString("created_at"),
-										randint);
+										obj.getString("created_at"), randint);
 								mListItems.add(tmp);
 							}
 							mAdapter.notifyDataSetChanged();
@@ -386,8 +390,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 										obj.getString("msg"),
 										obj.getString("user_id"),
 										obj.getString("anonid"),
-										obj.getString("created_at"),
-										randint);
+										obj.getString("created_at"), randint);
 								mListItems.add(tmp);
 							}
 							mAdapter.notifyDataSetChanged();

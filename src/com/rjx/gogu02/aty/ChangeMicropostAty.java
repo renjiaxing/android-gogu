@@ -354,7 +354,8 @@ public class ChangeMicropostAty extends ActionBarActivity {
 					for (int i = 0; i < result.length(); i++) {
 						JSONObject item = result.getJSONObject(i);
 						stockList.add(item.getString("code").toString() + ","
-								+ item.getString("name").toString());
+								+ item.getString("name").toString()+ ","
+								+ item.getString("shortname").toString());
 						sidList.add(item.getString("id").toString());
 					}
 

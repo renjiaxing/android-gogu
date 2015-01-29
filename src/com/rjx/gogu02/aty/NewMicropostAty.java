@@ -208,13 +208,14 @@ public class NewMicropostAty extends ActionBarActivity {
 					value = et1.getText().toString();
 					if (!value.equals("")) {
 						String content = "";
-						try {
-							content = URLEncoder.encode(et1.getText()
-									.toString(), "UTF-8");
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+//						try {
+//							content = URLEncoder.encode(et1.getText()
+//									.toString(), "UTF-8");
+							content=et1.getText().toString();
+//						} catch (UnsupportedEncodingException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 
 						// createMicropostNet(serUrl + "new_micropost_json?uid="
 						// + uid + "&&content=" + content + "&&stock="
@@ -479,7 +480,8 @@ public class NewMicropostAty extends ActionBarActivity {
 						for (int i = 0; i < result.length(); i++) {
 							JSONObject item = result.getJSONObject(i);
 							stockList.add(item.getString("code").toString()
-									+ "," + item.getString("name").toString());
+									+ "," + item.getString("name").toString()+ ","
+									+item.getString("shortname").toString());
 							sidList.add(item.getString("id").toString());
 						}
 					}

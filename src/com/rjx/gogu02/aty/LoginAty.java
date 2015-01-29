@@ -35,6 +35,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginAty extends Activity {
@@ -45,6 +46,7 @@ public class LoginAty extends Activity {
 	private String value = "";
 	private EditText et1;
 	private EditText et2;
+	private TextView tv_forgetpwd;
 	private SharedPreferences sp;
 	private String token = "";
 	private CheckBox cb1;
@@ -75,6 +77,7 @@ public class LoginAty extends Activity {
 		et1 = (EditText) findViewById(R.id.lg_username);
 		et2 = (EditText) findViewById(R.id.lg_password);
 		cb1 = (CheckBox) findViewById(R.id.lg_checkBox1);
+		tv_forgetpwd=(TextView) findViewById(R.id.lg_forgetpwd);
 
 		cb1.setChecked(true);
 
@@ -108,6 +111,15 @@ public class LoginAty extends Activity {
 			public void onClick(View v) {
 				Intent it2=new Intent(LoginAty.this,RegAty.class);
 				startActivity(it2);
+			}
+		});
+		
+		tv_forgetpwd.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent it3=new Intent(LoginAty.this,ForgetPwdAty.class);
+				startActivity(it3);
 			}
 		});
 

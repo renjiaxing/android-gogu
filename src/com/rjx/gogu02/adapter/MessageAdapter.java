@@ -93,7 +93,7 @@ public class MessageAdapter extends BaseAdapter {
 		if(msg_tmp.getFrom_id().equals(current_user)){
 			imageLoadTool.loadImage(iv_user, picUrl + rand_id+".png");
 		}else {
-			imageLoadTool.loadImage(iv_user, picUrl + (Integer.parseInt(msg_tmp.getAnonnum())+rand_id)%100
+			imageLoadTool.loadImage(iv_user, picUrl + (Integer.parseInt(msg_tmp.getAnontonum())+rand_id)%100
 					+ ".png");
 		}
 

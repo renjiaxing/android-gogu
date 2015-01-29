@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rjx.gogu02"
-    android:versionCode="4"
-    android:versionName="1.3" >
+    android:versionCode="7"
+    android:versionName="1.6" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -85,6 +85,10 @@
         <activity android:name="com.rjx.gogu02.aty.PicDetailAty" >
         </activity>
         <activity android:name="com.rjx.gogu02.aty.DelPicAty" >
+        </activity>
+        <activity android:name="com.rjx.gogu02.aty.ForgetPwdAty" >
+        </activity>
+        <activity android:name="com.rjx.gogu02.aty.AdviceAty" >
         </activity>
 
         <service android:name="com.rjx.gogu02.service.NotificationService" >

@@ -3,6 +3,7 @@ package com.rjx.gogu02.aty;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -47,6 +48,17 @@ public class SettingsAty extends Activity {
 		Integer msg_status = sp.getInt("msg_status", 1);
 
 		ImageView back_iv = (ImageView) findViewById(R.id.common_logo_back);
+		
+		TextView tv_advice=(TextView) findViewById(R.id.setting_advice);
+		
+		tv_advice.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent it=new Intent(SettingsAty.this,AdviceAty.class);
+				startActivity(it);
+			}
+		});
 
 		back_iv.setOnClickListener(new OnClickListener() {
 
