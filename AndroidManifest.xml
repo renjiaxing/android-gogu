@@ -90,6 +90,8 @@
         </activity>
         <activity android:name="com.rjx.gogu02.aty.AdviceAty" >
         </activity>
+        <activity android:name="com.rjx.gogu02.aty.ChangePwdAty" >
+        </activity>
 
         <service android:name="com.rjx.gogu02.service.NotificationService" >
         </service>

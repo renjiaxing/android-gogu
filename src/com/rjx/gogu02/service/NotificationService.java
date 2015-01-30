@@ -155,14 +155,22 @@ public class NotificationService extends Service {
 						// .getString("user_id"))) && (reply_push == 1))
 						// || (("1".equals(obj.getString("msgtype"))) &&
 						// (sys_push == 1))) {
-						if ((!"".equals(uid))
-								|| ("1".equals(obj.getString("msgtype")))) {
-							if (sys_push == 1 || reply_push == 1
-									|| msg_push == 1 || my_reply_push == 1) {
-								pushNotification(obj);
-							}
+						if (uid.equals("")) {
+							pushNotification(obj, "LogoPicAty");
+						} else if (sys_push == 1&&obj.getString("msgtype").equals("1")) {
+							pushNotification(obj, "MainActivity");
+						} else if (reply_push == 1&&obj.getString("msgtype").equals("2")) {
+							pushNotification(obj, "MyMicropostAty");
+						} else if (msg_push == 1&&obj.getString("msgtype").equals("3")) {
+							pushNotification(obj, "MyChatAty");
+						} else if (msg_push == 1&&obj.getString("msgtype").equals("4")) {
+							pushNotification(obj, "MyReplyAty");
 						}
+						
 					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -268,7 +276,7 @@ public class NotificationService extends Service {
 		super.onDestroy();
 	}
 
-	private void pushNotification(JSONObject obj) throws JSONException {
+	private void pushNotification(JSONObject obj,String clz) throws JSONException, ClassNotFoundException {
 		NotificationCompat.Builder nbuilder = new NotificationCompat.Builder(
 				getApplication());
 		nbuilder.setContentTitle(obj.getString("title"));
@@ -279,18 +287,21 @@ public class NotificationService extends Service {
 		nbuilder.setDefaults(Notification.DEFAULT_ALL);
 		nbuilder.setTicker(obj.getString("topshow"));
 		Intent mainAtyIt;
+		
+		Class clazz = Class.forName("com.rjx.gogu02.aty."+clz);
 
-		if (uid.equals("")) {
-			mainAtyIt = new Intent(getApplication(), LogoPicAty.class);
-		} else if (obj.getString("msgtype").equals("1")) {
-			mainAtyIt = new Intent(getApplication(), MainActivity.class);
-		} else if (obj.getString("msgtype").equals("2")) {
-			mainAtyIt = new Intent(getApplication(), MyMicropostAty.class);
-		} else if (obj.getString("msgtype").equals("3")) {
-			mainAtyIt = new Intent(getApplication(), MyChatAty.class);
-		} else {
-			mainAtyIt = new Intent(getApplication(), MyReplyAty.class);
-		}
+		mainAtyIt=new Intent(getApplication(),clazz);
+//		if (uid.equals("")) {
+//			mainAtyIt = new Intent(getApplication(), LogoPicAty.class);
+//		} else if (sys_push == 1&&obj.getString("msgtype").equals("1")) {
+//			mainAtyIt = new Intent(getApplication(), MainActivity.class);
+//		} else if (reply_push == 1&&obj.getString("msgtype").equals("2")) {
+//			mainAtyIt = new Intent(getApplication(), MyMicropostAty.class);
+//		} else if (msg_push == 1&&obj.getString("msgtype").equals("3")) {
+//			mainAtyIt = new Intent(getApplication(), MyChatAty.class);
+//		} else if (msg_push == 1&&obj.getString("msgtype").equals("4")) {
+//			mainAtyIt = new Intent(getApplication(), MyReplyAty.class);
+//		}
 
 		PendingIntent pi = PendingIntent.getActivity(getApplication(), 0,
 				mainAtyIt, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -50,6 +50,16 @@ public class SettingsAty extends Activity {
 		ImageView back_iv = (ImageView) findViewById(R.id.common_logo_back);
 		
 		TextView tv_advice=(TextView) findViewById(R.id.setting_advice);
+		TextView tv_changepwd=(TextView) findViewById(R.id.setting_changepwd);
+		
+		tv_changepwd.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent it=new Intent(SettingsAty.this,ChangePwdAty.class);
+				startActivity(it);
+			}
+		});
 		
 		tv_advice.setOnClickListener(new OnClickListener() {
 			
