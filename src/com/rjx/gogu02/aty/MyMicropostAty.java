@@ -104,10 +104,8 @@ public class MyMicropostAty extends Activity {
 		mAdapter = new MicropostsAdapter(this, mListItems,unreadList,token,user_id,handler);
 		mListView.setAdapter(mAdapter);
 		
-		readNet(serUrl+"microposts_json?uid=" + user_id
+		readNet(ConstantValue.MICROPOSTS_URL+"?uid=" + user_id
 				+ "&&token=" + token+"&&my_id="+user_id, 0);
-//		System.out.println("bbb");
-//		System.out.println(mListItems);
 
 		// ����ListView
 
@@ -119,7 +117,7 @@ public class MyMicropostAty extends Activity {
 			@Override
 			public void onPullDownToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
-				readNet(serUrl+"up_microposts_json?up=" + max
+				readNet(ConstantValue.UP_MICROPOSTS_URL+"?up=" + max
 						+ "&&uid=" + user_id + "&&token=" + token+"&&my_id="+user_id, 1);
 			}
 
@@ -128,7 +126,7 @@ public class MyMicropostAty extends Activity {
 			public void onPullUpToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
 
-				readNet(serUrl+"down_microposts_json?down="
+				readNet(ConstantValue.DOWN_MICROPOSTS_URL+"?down="
 						+ min + "&&uid=" + user_id + "&&token=" + token+"&&my_id="+user_id, 2);
 			}
 
@@ -145,7 +143,7 @@ public class MyMicropostAty extends Activity {
 		mAdapter = new MicropostsAdapter(this, mListItems,unreadList,token,user_id,handler);
 		mListView.setAdapter(mAdapter);
 		
-		readNet(serUrl+"microposts_json?uid=" + user_id
+		readNet(ConstantValue.MICROPOSTS_URL+"?uid=" + user_id
 				+ "&token=" + token+"&my_id="+user_id, 0);
 		super.onResume();
 	}
@@ -215,7 +213,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -243,7 +242,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -271,7 +271,8 @@ public class MyMicropostAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -313,28 +314,4 @@ public class MyMicropostAty extends Activity {
 		MyMicropostAty.this.finish();
 		super.onBackPressed();
 	}
-//	
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		 switch (item.getItemId()) {
-//		    // Respond to the action bar's Up/Home button
-//		    case android.R.id.home:
-//		        Intent upIntent = NavUtils.getParentActivityIntent(this);
-//		        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-//		            // This activity is NOT part of this app's task, so create a new task
-//		            // when navigating up, with a synthesized back stack.
-//		            TaskStackBuilder.create(this)
-//		                    // Add all of this activity's parents to the back stack
-//		                    .addNextIntentWithParentStack(upIntent)
-//		                    // Navigate up to the closest parent
-//		                    .startActivities();
-//		        } else {
-//		            // This activity is part of this app's task, so simply
-//		            // navigate up to the logical parent activity.
-//		            NavUtils.navigateUpTo(this, upIntent);
-//		        }
-//		        return true;
-//		    }
-//		    return super.onOptionsItemSelected(item);
-//	}
 }

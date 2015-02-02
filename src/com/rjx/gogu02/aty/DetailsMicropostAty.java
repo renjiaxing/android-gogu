@@ -1,11 +1,13 @@
 package com.rjx.gogu02.aty;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -42,6 +44,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.R.id;
 import com.rjx.gogu02.R.layout;
@@ -204,12 +209,78 @@ public class DetailsMicropostAty extends ActionBarActivity {
 						comment = URLEncoder.encode(et.getText().toString(),
 								"UTF-8");
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					DetailsMicropostNet(serUrl + "new_comment_json?mid=" + mid
-							+ "&&msg=" + comment + "&&uid=" + uid + "&&token="
-							+ token, 4);
+
+					RequestParams params = new RequestParams();
+					params.put("uid", uid);
+					params.put("token", token);
+					params.put("mid", mid);
+					params.put("msg", comment);
+					AsyncHttpClient client = new AsyncHttpClient();
+					client.setTimeout(1000);
+					client.post(ConstantValue.NEW_COMMENT_URL, params,
+							new JsonHttpResponseHandler() {
+								@Override
+								public void onSuccess(int statusCode,
+										Header[] headers, JSONObject response) {
+									super.onSuccess(statusCode, headers,
+											response);
+									try {
+										if (response.getString("result")
+												.equals("ok")) {
+											JSONArray arr = new JSONArray(response
+													.getString("comments"));
+
+											if (arr.length() >= 1) {
+												mListItems.clear();
+												// et.setText("");
+												for (int i = 0; i < arr
+														.length(); i++) {
+													JSONObject obj = arr
+															.getJSONObject(i);
+													Comments tmp = new Comments(
+															obj.getString("id"),
+															obj.getString("msg"),
+															obj.getString("user_id"),
+															obj.getString("anonid"),
+															obj.getString("created_at"),
+															randint);
+													mListItems.add(tmp);
+												}
+												mAdapter.notifyDataSetChanged();
+											}
+											et.setText("");
+										} else {
+											showInfo("创建评论失败~");
+										}
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+										Header[] headers, Throwable throwable,
+										JSONObject errorResponse) {
+									showInfo("创建评论失败,请稍后再试~");
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+										Header[] headers,
+										String responseString,
+										Throwable throwable) {
+									showInfo("创建评论失败,请稍后再试~");
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
+
+					// DetailsMicropostNet(serUrl + "new_comment_json?mid=" +
+					// mid
+					// + "&&msg=" + comment + "&&uid=" + uid + "&&token="
+					// + token, 4);
 					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(getCurrentFocus()
 							.getWindowToken(),
@@ -220,13 +291,11 @@ public class DetailsMicropostAty extends ActionBarActivity {
 
 		client = new DefaultHttpClient();
 		mListItems = new ArrayList<Comments>();
-		// mAdapter = new ArrayAdapter<Comments>(this,
-		// android.R.layout.simple_list_item_1, mListItems);
 		mAdapter = new CommentAdapter(this, mListItems, uid, token,
 				user_randint, handler);
 		mListView.setAdapter(mAdapter);
 
-		DetailsMicropostNet(serUrl + "detail_micropost_json?mid=" + mid
+		DetailsMicropostNet(ConstantValue.DETAIL_MICROPOST_URL + "?mid=" + mid
 				+ "&&uid=" + uid + "&&token=" + token, 3);
 
 	}
@@ -236,27 +305,6 @@ public class DetailsMicropostAty extends ActionBarActivity {
 		wxapi.unregisterApp();
 		super.onDestroy();
 	}
-
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	//
-	// MenuInflater inflater=getMenuInflater();
-	// inflater.inflate(R.menu.details_micropost, menu);
-	// return super.onCreateOptionsMenu(menu);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// finish();
-	// break;
-	//
-	// default:
-	// break;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
 
 	public void DetailsMicropostNet(String url, Integer mod) {
 		new AsyncTask<Object, Void, Integer>() {
@@ -291,6 +339,7 @@ public class DetailsMicropostAty extends ActionBarActivity {
 
 	}
 
+	/*commentAdapter有使用请不要删除*/
 	Handler handler = new Handler() {
 
 		public void handleMessage(Message msg) {

@@ -49,10 +49,7 @@ public class UpdateManager {
 	// 提示语
 	private String updateMsg = "有最新的软件包哦，修正了一下bug，请快下载吧~";
 
-	// 返回的安装包url
-	
-	
-	private String apkUrl = serUrl+"file/gogu02.apk";
+	private String apkUrl = ConstantValue.FILE_URL;
 
 	private Dialog noticeDialog;
 
@@ -101,7 +98,7 @@ public class UpdateManager {
 
 	// 外部接口让主Activity调用
 	public void checkUpdateInfo() {
-		CheckVersion(serUrl+"get_version");
+		CheckVersion(ConstantValue.VERSION_URL);
 	}
 	
 	public void CheckVersion(String url) {
@@ -178,8 +175,6 @@ public class UpdateManager {
 				dialog.dismiss();
 				mNotifyManager = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 				mBuilder = new NotificationCompat.Builder(mContext);
-//				String appName=mContext.getString(mContext.getApplicationInfo().labelRes);
-//				int icon=mContext.getApplicationInfo().icon;
 				mBuilder.setContentTitle("股刺网").setSmallIcon(R.drawable.logo28);
 				downloadApk();
 			}

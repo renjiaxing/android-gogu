@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="用户名" >
+            android:hint="邮箱地址" >
 
             <requestFocus />
         </EditText>

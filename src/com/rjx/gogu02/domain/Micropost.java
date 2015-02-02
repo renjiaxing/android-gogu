@@ -12,10 +12,12 @@ public class Micropost {
 	private String create_time;
 	private String unread;
 	private String image;
+	private String stock_full_name;
+
 
 	public Micropost(String id, String content, String user_id,
 			String stock_id, String stock_name, String comment_size,
-			String good, String good_number, String create_at, String unread,String image) {
+			String good, String good_number, String create_at, String unread,String image,String stock_full_name) {
 		this.id = id;
 		this.content = content;
 		this.user_id = user_id;
@@ -27,6 +29,7 @@ public class Micropost {
 		this.create_time = create_at;
 		this.unread = unread;
 		this.image=image;
+		this.stock_full_name=stock_full_name;
 	}
 
 	public String getImage() {
@@ -115,6 +118,15 @@ public class Micropost {
 
 	public void setGood(String good) {
 		this.good = good;
+	}
+	
+
+	public String getStock_full_name() {
+		return stock_full_name;
+	}
+
+	public void setStock_full_name(String stock_full_name) {
+		this.stock_full_name = stock_full_name;
 	}
 
 }

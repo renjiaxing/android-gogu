@@ -3,6 +3,7 @@ package com.rjx.gogu02.aty;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -17,6 +18,7 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,24 +30,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.utils.ConstantValue;
 
 public class RegAty extends Activity {
-	private EditText nameEt;
+	private EditText codeEt;
 	private EditText emailEt;
 	private EditText phoneEt;
 	private EditText passwdEt;
 	private EditText passwdcEt;
 	private String value = "";
 	private HttpClient client;
-	private String serUrl=ConstantValue.SERVER_URL;
+	private String serUrl = ConstantValue.SERVER_URL;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reg_aty);
-		
+
 		getActionBar().setDisplayShowHomeEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowCustomEnabled(true);
@@ -57,7 +62,7 @@ public class RegAty extends Activity {
 				new ActionBar.LayoutParams(LayoutParams.MATCH_PARENT,
 						LayoutParams.WRAP_CONTENT));
 
-		nameEt = (EditText) findViewById(R.id.rg_name_et);
+		codeEt = (EditText) findViewById(R.id.rg_code_et);
 		emailEt = (EditText) findViewById(R.id.rg_email_et);
 		phoneEt = (EditText) findViewById(R.id.rg_phone_et);
 		passwdEt = (EditText) findViewById(R.id.rg_passwd_et);
@@ -73,8 +78,8 @@ public class RegAty extends Activity {
 			@Override
 			public void onClick(View v) {
 				Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
-				if (nameEt.getText().toString().equals("")) {
-					showInfo("名字不能为空");
+				if (codeEt.getText().toString().equals("")) {
+					showInfo("验证码不能为空");
 				} else if (!(pattern.matcher(emailEt.getText().toString())
 						.matches())) {
 					showInfo("请输入正确的邮件地址");
@@ -84,12 +89,60 @@ public class RegAty extends Activity {
 						.equals(passwdcEt.getText().toString())) {
 					showInfo("请确认密码输入一致");
 				} else {
+					RequestParams params = new RequestParams();
+					params.put("code", codeEt.getText().toString());
+					params.put("email", emailEt.getText().toString());
+					params.put("phone", phoneEt.getText().toString());
+					params.put("passwd", passwdEt.getText().toString());
+					AsyncHttpClient client = new AsyncHttpClient();
+					client.setTimeout(1000);
+					client.post(ConstantValue.REG_URL, params,
+							new JsonHttpResponseHandler() {
+								@Override
+								public void onSuccess(int statusCode,
+										Header[] headers, JSONObject response) {
+									try {
+										if(!(response.getString("checkcode").equals("ok"))){
+											showInfo("邀请码错误~");
+										}else if(response.getString("checkemail")
+												.equals("ok")) {
+											if (response.getString("result")
+													.equals("ok")) {
+												showInfo("用户创建成功！");
+												Intent it2 = new Intent(
+														RegAty.this,
+														LoginAty.class);
+												startActivity(it2);
+												finish();
+											} else {
+												showInfo("用户创建失败！");
+											}
+										} else {
+											showInfo("邮件已经存在！");
+										}
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
 
-					RegNet(serUrl+"reg_json?name="
-							+ nameEt.getText().toString() + "&&email="
-							+ emailEt.getText().toString() + "&&phone="
-							+ phoneEt.getText().toString() + "&&passwd="
-							+ passwdEt.getText().toString(), 7);
+								@Override
+								public void onFailure(int statusCode,
+										Header[] headers, Throwable throwable,
+										JSONObject errorResponse) {
+									showInfo("无法注册,请稍后再试~");
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+										Header[] headers,
+										String responseString,
+										Throwable throwable) {
+									showInfo("无法注册,请稍后再试~");
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
+
 				}
 			}
 		});
@@ -105,67 +158,6 @@ public class RegAty extends Activity {
 		});
 
 	}
-
-	public void RegNet(String url, Integer mod) {
-		new AsyncTask<Object, Void, Integer>() {
-
-			@Override
-			protected Integer doInBackground(Object... params) {
-
-				String urlString = (String) params[0];
-				Integer mod = (Integer) params[1];
-
-				HttpGet get = new HttpGet(urlString);
-
-				Message msg = new Message();
-				msg.what = mod;
-
-				try {
-					HttpResponse response = client.execute(get);
-					value = EntityUtils.toString(response.getEntity());
-					handler.sendMessage(msg);
-
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				return null;
-
-			}
-
-		}.execute(url, mod);
-
-	}
-
-	Handler handler = new Handler() {
-
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 7:
-				try {
-					JSONObject con = new JSONObject(value.toString());
-					if (con.getString("checkemail").equals("ok")) {
-						if (con.getString("result").equals("ok")) {
-							showInfo("用户创建成功！");
-							Intent it2 = new Intent(RegAty.this, LoginAty.class);
-							startActivity(it2);
-							finish();
-						} else {
-							showInfo("用户创建失败！");
-						}
-					} else {
-						showInfo("邮件已经存在！");
-					}
-
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				break;
-			}
-		};
-	};
 
 	public void showInfo(String info) {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)

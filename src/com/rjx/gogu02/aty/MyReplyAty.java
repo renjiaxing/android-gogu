@@ -100,7 +100,7 @@ public class MyReplyAty extends Activity {
 				handler);
 		mListView.setAdapter(mAdapter);
 
-		readNet(serUrl + "microposts_json?uid=" + user_id + "&token=" + token+"&my_reply_id="+user_id,
+		readNet(ConstantValue.MICROPOSTS_URL + "?uid=" + user_id + "&token=" + token+"&my_reply_id="+user_id,
 				0);
 
 		ImageView back = (ImageView) findViewById(R.id.common_logo_back);
@@ -124,8 +124,8 @@ public class MyReplyAty extends Activity {
 			@Override
 			public void onPullDownToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
-				readNet(serUrl + "up_microposts_json?up=" + max + "&&uid="
-						+ user_id + "&&token=" + token+"&my_reply_id"+user_id, 1);
+				readNet(ConstantValue.UP_MICROPOSTS_URL + "?up=" + max + "&&uid="
+						+ user_id + "&&token=" + token+"&my_reply_id="+user_id, 1);
 			}
 
 			// ����Pulling Up
@@ -133,7 +133,7 @@ public class MyReplyAty extends Activity {
 			public void onPullUpToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
 
-				readNet(serUrl + "down_microposts_json?down=" + min + "&&uid="
+				readNet(ConstantValue.DOWN_MICROPOSTS_URL + "?down=" + min + "&&uid="
 						+ user_id + "&&token=" + token+"&my_reply_id="+user_id, 2);
 			}
 
@@ -152,7 +152,7 @@ public class MyReplyAty extends Activity {
 				handler);
 		mListView.setAdapter(mAdapter);
 
-		readNet(serUrl + "microposts_json?uid=" + user_id + "&token=" + token+"&my_reply_id="+user_id,
+		readNet(ConstantValue.MICROPOSTS_URL + "?uid=" + user_id + "&token=" + token+"&my_reply_id="+user_id,
 				0);
 	}
 
@@ -221,7 +221,8 @@ public class MyReplyAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -249,7 +250,8 @@ public class MyReplyAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -277,7 +279,8 @@ public class MyReplyAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();

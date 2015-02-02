@@ -1,10 +1,13 @@
 package com.rjx.gogu02.aty;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -16,10 +19,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,10 +44,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.R.id;
 import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.utils.ConstantValue;
+import com.rjx.gogu02.utils.ImageLoadTool;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
 
@@ -69,6 +82,11 @@ public class ChangeMicropostAty extends ActionBarActivity {
 	private String serUrl = ConstantValue.SERVER_URL;
 	private String content = "";
 	private String mid = "";
+	private String stock_full_name,image;
+	private ImageView iv_add_pic;
+	private Boolean hasPic = false;
+	private ImageLoadTool imageLoadTool=new ImageLoadTool();
+	private String url = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,30 +108,49 @@ public class ChangeMicropostAty extends ActionBarActivity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		uid = sp.getString("user_id", "");
 		token = sp.getString("token", "");
+		iv_add_pic=(ImageView) findViewById(R.id.nm_iv_addpic);
+		
+		iv_add_pic.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (hasPic == false) {
+					Intent intent = new Intent();
+					intent = new Intent(
+							Intent.ACTION_PICK,
+							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+					startActivityForResult(intent, 1);
+				} else {
+					Intent intent = new Intent(ChangeMicropostAty.this,
+							DelPicAty.class);
+					Bundle bd = new Bundle();
+					bd.putString("url", url);
+					intent.putExtra("pic", bd);
+					startActivityForResult(intent, 2);
+				}
+			}
+		});
 
 		Bundle dl = this.getIntent().getExtras();
 
 		mid = dl.getString("mid");
 		content = dl.getString("content");
+		stock_full_name=dl.getString("stock_full_name", "");
+		image=dl.getString("image","");
+		url=image;
+		
+		if (!image.equals("")){
+			imageLoadTool.loadImage(iv_add_pic,ConstantValue.SERVER_URL.substring(0, ConstantValue.SERVER_URL.length()-1)+image);
+		}
 
 		et1 = (EditText) findViewById(R.id.nm_editText1);
 		et1.setText(content);
-
+		
 		actx = (AutoCompleteTextView) findViewById(R.id.nm_auto);
-		ResizeLayout rl = (ResizeLayout) findViewById(R.id.nm_relative);
+		
+		actx.setText(stock_full_name.toString());
 
-		// actx.setOnFocusChangeListener(new OnFocusChangeListener() {
-		//
-		// @Override
-		// public void onFocusChange(View v, boolean hasFocus) {
-		// LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)
-		// et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���
-		// linearParams.height =
-		// (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);//
-		// ���ؼ��ĸ�ǿ�����50����
-		// et1.setLayoutParams(linearParams);
-		// }
-		// });
+		ResizeLayout rl = (ResizeLayout) findViewById(R.id.nm_relative);
 
 		rl.setOnResizeListener(new OnResizeListener() {
 
@@ -128,16 +165,8 @@ public class ChangeMicropostAty extends ActionBarActivity {
 					change = BIGGER;
 				}
 
-				// System.out.println(h);
-				// System.out.println(oldh);
-
 				msg.what = change;
-				// if (change==BIGGER){
-				// showInfo("aaa");
-				//
-				// }else{
-				// showInfo("bbb");
-				// }
+				
 				handler.sendMessage(msg);
 
 			}
@@ -147,27 +176,10 @@ public class ChangeMicropostAty extends ActionBarActivity {
 
 		iv_send = (ImageView) findViewById(R.id.nm_iv_send);
 
-		// et1.setOnFocusChangeListener(new OnFocusChangeListener() {
-		//
-		// @Override
-		// public void onFocusChange(View v, boolean hasFocus) {
-		// LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)
-		// et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���
-		// linearParams.height =
-		// (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);//
-		// ���ؼ��ĸ�ǿ�����50����
-		// et1.setLayoutParams(linearParams);
-		// }
-		// });
-		//
-
 		iv_back.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// Intent it=new Intent(ChangeMicropostAty.this,
-				// MainActivity.class);
-				// startActivity(it);
 				finish();
 			}
 		});
@@ -180,26 +192,94 @@ public class ChangeMicropostAty extends ActionBarActivity {
 				if (!stock.equals("")) {
 					value = et1.getText().toString();
 					if (!value.equals("")) {
+						String content = "";
+						content = et1.getText().toString();
 						try {
-							content = URLEncoder.encode(et1.getText()
-									.toString(), "UTF-8");
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
+							RequestParams params = new RequestParams();
+							params.put("uid", uid);
+							params.put("token", token);
+							params.put("mid", mid);
+							params.put("micropost[content]", content);
+							params.put("micropost[user_id]", uid);
+							params.put("micropost[stock_id]",
+									stock.split(",")[0]);
+							if ((!(url.equals("")))&&(!url.equals(image))) {
+								params.put("micropost[image]", new File(url));
+							}
+							AsyncHttpClient client = new AsyncHttpClient();
+							client.setTimeout(1000);
+							client.post(ConstantValue.CHANGE_MICROPOST_URL, params,
+									new JsonHttpResponseHandler() {
+										@Override
+										public void onSuccess(int statusCode,
+												Header[] headers,
+												JSONObject response) {
+											super.onSuccess(statusCode,
+													headers, response);
+											try {
+												if (response
+														.getString("result")
+														.equals("ok")) {
+													finish();
+												} else {
+													showInfo("修改失败");
+												}
+											} catch (JSONException e) {
+												e.printStackTrace();
+											}
+										}
+
+										@Override
+										public void onFailure(int statusCode,
+												Header[] headers,
+												Throwable throwable,
+												JSONObject errorResponse) {
+											showInfo("修改失败,请稍后再试~");
+										}
+										
+										@Override
+										public void onFailure(int statusCode,
+												Header[] headers,
+												String responseString,
+												Throwable throwable) {
+											showInfo("修改失败,请稍后再试~");
+											super.onFailure(statusCode, headers, responseString, throwable);
+										}
+									});
+						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}
-
-						changeMicropostNet(serUrl
-								+ "micropost_change_json?uid=" + uid
-								+ "&&content=" + content + "&&stock=" + stock
-								+ "&&token=" + token + "&&mid=" + mid);
-					}
-
-					else {
+					} else {
 						showInfo("匿名信息为必填~");
 					}
 				} else {
 					showInfo("股票代码为必填~");
 				}
+
+//				String stock = actx.getText().toString();
+//				if (!stock.equals("")) {
+//					value = et1.getText().toString();
+//					if (!value.equals("")) {
+//						try {
+//							content = URLEncoder.encode(et1.getText()
+//									.toString(), "UTF-8");
+//						} catch (UnsupportedEncodingException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//
+//						changeMicropostNet(serUrl
+//								+ "micropost_change_json?uid=" + uid
+//								+ "&&content=" + content + "&&stock=" + stock
+//								+ "&&token=" + token + "&&mid=" + mid);
+//					}
+//
+//					else {
+//						showInfo("匿名信息为必填~");
+//					}
+//				} else {
+//					showInfo("股票代码为必填~");
+//				}
 
 			}
 		});
@@ -228,6 +308,39 @@ public class ChangeMicropostAty extends ActionBarActivity {
 		});
 
 	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1) {
+			if (resultCode == Activity.RESULT_OK) {
+				Uri uri = data.getData();
+				if (uri != null && "content".equals(uri.getScheme())) {
+					Cursor cursor = this
+							.getContentResolver()
+							.query(uri,
+									new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
+									null, null, null);
+					cursor.moveToFirst();
+					url = cursor.getString(0);
+					File f = new File(url);
+					cursor.close();
+				} else {
+					url = uri.getPath();
+				}
+				ImageSize targetSize = new ImageSize(200, 250);
+				Bitmap bm = imageLoadTool.imageLoader.loadImageSync(
+						data.getData().toString(), targetSize);
+				iv_add_pic.setImageBitmap(bm);
+				hasPic = true;
+			}
+		} else if (requestCode == 2) {
+			if (resultCode == Activity.RESULT_OK) {
+				url = "";
+				iv_add_pic.setImageDrawable(getResources().getDrawable(
+						R.drawable.pic_add));
+				hasPic = false;
+			}
+		}
+	};
 
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -249,47 +362,6 @@ public class ChangeMicropostAty extends ActionBarActivity {
 		}
 	};
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.new_micropost, menu);
-	// return super.onCreateOptionsMenu(menu);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// finish();
-	// break;
-	//
-	// case R.id.nm_send:
-	// value = et1.getText().toString();
-	// String content = et1.getText().toString();
-	// String stock = actx.getText().toString();
-	// // stock_id=sidList.get(stockList.indexOf(ac));
-	// createMicropostNet(serUrl+"new_micropost_json?uid="
-	// + uid + "&&content=" + content + "&&stock=" + stock+"&&token="
-	// +token);
-	//
-	// break;
-	// default:
-	// break;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
-	//
-	// private void setOverflownoShowingAlways() {
-	// try {
-	// ViewConfiguration config = ViewConfiguration.get(this);
-	// Field menuKeyField = ViewConfiguration.class
-	// .getDeclaredField("sHasPermanentMenuKey");
-	// menuKeyField.setAccessible(true);
-	// menuKeyField.setBoolean(config, true);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
 
 	public void changeMicropostNet(String url) {
 

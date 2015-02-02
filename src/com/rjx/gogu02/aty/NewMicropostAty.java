@@ -132,19 +132,6 @@ public class NewMicropostAty extends ActionBarActivity {
 			}
 		});
 
-		// actx.setOnFocusChangeListener(new OnFocusChangeListener() {
-		//
-		// @Override
-		// public void onFocusChange(View v, boolean hasFocus) {
-		// LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)
-		// et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���
-		// linearParams.height =
-		// (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);//
-		// ���ؼ��ĸ�ǿ�����50����
-		// et1.setLayoutParams(linearParams);
-		// }
-		// });
-
 		rl.setOnResizeListener(new OnResizeListener() {
 
 			@Override
@@ -158,16 +145,7 @@ public class NewMicropostAty extends ActionBarActivity {
 					change = BIGGER;
 				}
 
-				// System.out.println(h);
-				// System.out.println(oldh);
-
 				msg.what = change;
-				// if (change==BIGGER){
-				// showInfo("aaa");
-				//
-				// }else{
-				// showInfo("bbb");
-				// }
 				handler.sendMessage(msg);
 
 			}
@@ -176,20 +154,6 @@ public class NewMicropostAty extends ActionBarActivity {
 		iv_back = (ImageView) findViewById(R.id.nm_iv_logo_back);
 
 		iv_send = (ImageView) findViewById(R.id.nm_iv_send);
-
-		// et1.setOnFocusChangeListener(new OnFocusChangeListener() {
-		//
-		// @Override
-		// public void onFocusChange(View v, boolean hasFocus) {
-		// LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)
-		// et1.getLayoutParams(); // ȡ�ؼ�mGrid��ǰ�Ĳ��ֲ���
-		// linearParams.height =
-		// (int)(getApplicationContext().getResources().getDisplayMetrics().density*200+0.5f);//
-		// ���ؼ��ĸ�ǿ�����50����
-		// et1.setLayoutParams(linearParams);
-		// }
-		// });
-		//
 
 		iv_back.setOnClickListener(new OnClickListener() {
 
@@ -208,20 +172,11 @@ public class NewMicropostAty extends ActionBarActivity {
 					value = et1.getText().toString();
 					if (!value.equals("")) {
 						String content = "";
-//						try {
-//							content = URLEncoder.encode(et1.getText()
-//									.toString(), "UTF-8");
-							content=et1.getText().toString();
-//						} catch (UnsupportedEncodingException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-
-						// createMicropostNet(serUrl + "new_micropost_json?uid="
-						// + uid + "&&content=" + content + "&&stock="
-						// + stock + "&&token=" + token);
+						content = et1.getText().toString();
 						try {
 							RequestParams params = new RequestParams();
+							params.put("uid", uid);
+							params.put("token", token);
 							params.put("micropost[content]", content);
 							params.put("micropost[user_id]", uid);
 							params.put("micropost[stock_id]",
@@ -231,18 +186,12 @@ public class NewMicropostAty extends ActionBarActivity {
 							}
 							AsyncHttpClient client = new AsyncHttpClient();
 							client.setTimeout(1000);
-							client.post(ConstantValue.SERVER_URL
-									+ "add_micropost_test_api/", params,
+							client.post(ConstantValue.NEW_MICROPOST_URL, params,
 									new JsonHttpResponseHandler() {
 										@Override
 										public void onSuccess(int statusCode,
 												Header[] headers,
 												JSONObject response) {
-											// TODO Auto-generated method stub
-											System.out.println("ok:"
-													+ statusCode + " "
-													+ headers.toString() + " "
-													+ response.toString());
 											super.onSuccess(statusCode,
 													headers, response);
 											try {
@@ -254,8 +203,6 @@ public class NewMicropostAty extends ActionBarActivity {
 													showInfo("创建失败");
 												}
 											} catch (JSONException e) {
-												// TODO Auto-generated catch
-												// block
 												e.printStackTrace();
 											}
 										}
@@ -265,18 +212,19 @@ public class NewMicropostAty extends ActionBarActivity {
 												Header[] headers,
 												Throwable throwable,
 												JSONObject errorResponse) {
-											// TODO Auto-generated method stub
-											System.out.println("failed:aaaaa"
-													+ statusCode + " "
-													+ headers);
-											showInfo("创建失败");
-											// super.onFailure(statusCode,
-											// headers, throwable,
-											// errorResponse);
+											showInfo("创建失败,请稍后再试~");
+										}
+										
+										@Override
+										public void onFailure(int statusCode,
+												Header[] headers,
+												String responseString,
+												Throwable throwable) {
+											showInfo("创建失败,请稍后再试~");
+											super.onFailure(statusCode, headers, responseString, throwable);
 										}
 									});
 						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					} else {
@@ -324,17 +272,21 @@ public class NewMicropostAty extends ActionBarActivity {
 			if (resultCode == Activity.RESULT_OK) {
 				Uri uri = data.getData();
 				if (uri != null && "content".equals(uri.getScheme())) {
-                    Cursor cursor = this.getContentResolver().query(uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
-                    cursor.moveToFirst();   
-                    url = cursor.getString(0);
-                    File f=new File(url);
-                    cursor.close();
-                }
-                else {
-                	url = uri.getPath();
-                }
+					Cursor cursor = this
+							.getContentResolver()
+							.query(uri,
+									new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
+									null, null, null);
+					cursor.moveToFirst();
+					url = cursor.getString(0);
+					File f = new File(url);
+					cursor.close();
+				} else {
+					url = uri.getPath();
+				}
 				ImageSize targetSize = new ImageSize(200, 250);
-				Bitmap bm = imageLoader.loadImageSync(data.getData().toString(), targetSize);
+				Bitmap bm = imageLoader.loadImageSync(
+						data.getData().toString(), targetSize);
 				iv_add_pic.setImageBitmap(bm);
 				hasPic = true;
 			}
@@ -372,48 +324,6 @@ public class NewMicropostAty extends ActionBarActivity {
 			}
 		}
 	};
-
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.new_micropost, menu);
-	// return super.onCreateOptionsMenu(menu);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// finish();
-	// break;
-	//
-	// case R.id.nm_send:
-	// value = et1.getText().toString();
-	// String content = et1.getText().toString();
-	// String stock = actx.getText().toString();
-	// // stock_id=sidList.get(stockList.indexOf(ac));
-	// createMicropostNet(serUrl+"new_micropost_json?uid="
-	// + uid + "&&content=" + content + "&&stock=" + stock+"&&token="
-	// +token);
-	//
-	// break;
-	// default:
-	// break;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
-	//
-	// private void setOverflownoShowingAlways() {
-	// try {
-	// ViewConfiguration config = ViewConfiguration.get(this);
-	// Field menuKeyField = ViewConfiguration.class
-	// .getDeclaredField("sHasPermanentMenuKey");
-	// menuKeyField.setAccessible(true);
-	// menuKeyField.setBoolean(config, true);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
 
 	public void createMicropostNet(String url) {
 
@@ -480,8 +390,9 @@ public class NewMicropostAty extends ActionBarActivity {
 						for (int i = 0; i < result.length(); i++) {
 							JSONObject item = result.getJSONObject(i);
 							stockList.add(item.getString("code").toString()
-									+ "," + item.getString("name").toString()+ ","
-									+item.getString("shortname").toString());
+									+ "," + item.getString("name").toString()
+									+ ","
+									+ item.getString("shortname").toString());
 							sidList.add(item.getString("id").toString());
 						}
 					}

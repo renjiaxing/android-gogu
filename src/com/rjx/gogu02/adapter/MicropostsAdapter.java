@@ -179,6 +179,8 @@ public class MicropostsAdapter extends BaseAdapter {
 					Bundle bl = new Bundle();
 					bl.putString("content", tmp.getContent());
 					bl.putString("mid", tmp.getId());
+					bl.putString("stock_full_name", tmp.getStock_full_name());
+					bl.putString("image", tmp.getImage());
 					Intent it = new Intent(context, ChangeMicropostAty.class);
 					it.putExtras(bl);
 					context.startActivity(it);

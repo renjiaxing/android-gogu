@@ -3,12 +3,16 @@ package com.rjx.gogu02.adapter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +29,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.aty.DetailsMicropostAty;
 import com.rjx.gogu02.aty.NewMessageAty;
@@ -45,6 +52,7 @@ public class CommentAdapter extends BaseAdapter {
 	private String value = "";
 	private String serUrl = ConstantValue.SERVER_URL;
 	private String picUrl = ConstantValue.SERVER_PIC_URL;
+	private ArrayList<Comments> mListItems=new ArrayList<Comments>();
 
 	ImageLoadTool imageLoadTool = new ImageLoadTool();
 
@@ -109,7 +117,8 @@ public class CommentAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(View v) {
-					DelCommentNet(serUrl + "del_comment_json?uid="
+					
+					DelCommentNet(ConstantValue.DEL_COMMENT_URL + "?uid="
 							+ currentUser + "&&cid=" + tmp.getId() + "&&token="
 							+ token, 12);
 				}

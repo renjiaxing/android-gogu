@@ -98,7 +98,7 @@ public class ChangePwdAty extends Activity {
 				params.put("newpwd", newpwd);
 				AsyncHttpClient client = new AsyncHttpClient();
 				client.setTimeout(1000);
-				client.post(ConstantValue.SERVER_URL + "changepwd_api/",
+				client.post(ConstantValue.CHANGE_PASSWORD_URL,
 						params, new JsonHttpResponseHandler() {
 					
 							@Override

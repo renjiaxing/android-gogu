@@ -38,7 +38,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.jauker.widget.BadgeView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -54,7 +53,6 @@ public class MainActivity extends ActionBarActivity {
 
 	private ArrayList<Micropost> mListItems;
 	private PullToRefreshListView mListView;
-	// private ArrayAdapter<String> mAdapter;
 	private MicropostsAdapter mAdapter;
 	private HttpClient client;
 	private String value = "";
@@ -69,14 +67,14 @@ public class MainActivity extends ActionBarActivity {
 	private ImageView mychat_iv, reply_iv, other_reply_iv;
 	private ArrayList<String> unreadList = new ArrayList<String>();
 	private BadgeView badge, badge2;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		ImageLoader imageLoader = ImageLoader.getInstance();
-		
+
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
 				getApplicationContext())
 				.threadPriority(Thread.NORM_PRIORITY - 2)
@@ -118,9 +116,6 @@ public class MainActivity extends ActionBarActivity {
 				mTitleView,
 				new ActionBar.LayoutParams(LayoutParams.MATCH_PARENT,
 						LayoutParams.WRAP_CONTENT));
-		
-		 
-		 
 
 		final ImageView iv_search = (ImageView) findViewById(R.id.mn_search);
 
@@ -138,8 +133,8 @@ public class MainActivity extends ActionBarActivity {
 
 		other_reply_iv = (ImageView) findViewById(R.id.mn_reply_microposts);
 
-		 other_reply_iv.setOnClickListener(new OnClickListener() {
-			
+		other_reply_iv.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				Intent it = new Intent(MainActivity.this, MyReplyAty.class);
@@ -147,9 +142,6 @@ public class MainActivity extends ActionBarActivity {
 				finish();
 			}
 		});
-
-		// badge= new BadgeView(MainActivity.this);
-		// badge2= new BadgeView(MainActivity.this);
 
 		iv_search.setOnClickListener(new OnClickListener() {
 
@@ -199,14 +191,10 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 
-		readNet(serUrl + "microposts_json?uid=" + user_id + "&token=" + token,
+		readNet(ConstantValue.MICROPOSTS_URL+"?uid=" + user_id + "&token=" + token,
 				0);
-		// System.out.println("bbb");
-		// System.out.println(mListItems);
 
-		// ����ListView
 
-		// ����PullToRefresh
 		mListView.setMode(Mode.BOTH);
 		mListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
@@ -214,7 +202,7 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onPullDownToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
-				readNet(serUrl + "up_microposts_json?up=" + max + "&&uid="
+				readNet(ConstantValue.UP_MICROPOSTS_URL+"?up=" + max + "&&uid="
 						+ user_id + "&&token=" + token, 1);
 			}
 
@@ -223,27 +211,12 @@ public class MainActivity extends ActionBarActivity {
 			public void onPullUpToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
 
-				readNet(serUrl + "down_microposts_json?down=" + min + "&&uid="
+				readNet(ConstantValue.DOWN_MICROPOSTS_URL+"?down=" + min + "&&uid="
 						+ user_id + "&&token=" + token, 2);
 			}
 
 		});
 
-		// mListView.setOnItemClickListener(new OnItemClickListener() {
-		//
-		// @Override
-		// public void onItemClick(AdapterView<?> parent, View view,
-		// int position, long id) {
-		// TextView id_tv = (TextView) view.findViewById(R.id.id_text);
-		// String id_st = id_tv.getText().toString();
-		// Bundle data = new Bundle();
-		// data.putString("mid", id_st);
-		// Intent it2 = new Intent(MainActivity.this,
-		// DetailsMicropostAty.class);
-		// it2.putExtras(data);
-		// startActivity(it2);
-		// }
-		// });
 
 	}
 
@@ -258,44 +231,11 @@ public class MainActivity extends ActionBarActivity {
 				user_id, handler);
 		mListView.setAdapter(mAdapter);
 
-		readNet(serUrl + "microposts_json?uid=" + user_id + "&&token=" + token,
+		readNet(ConstantValue.MICROPOSTS_URL+"?uid=" + user_id + "&&token=" + token,
 				0);
 		super.onResume();
 
 	}
-
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	//
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.main, menu);
-	// return super.onCreateOptionsMenu(menu);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case id.main_menu_msg:
-	// Intent it = new Intent(MainActivity.this, NewMicropostAty.class);
-	// startActivity(it);
-	// break;
-	//
-	// case id.main_menu_logout:
-	// Editor et = sp.edit();
-	// et.clear();
-	// et.commit();
-	// Intent it2 = new Intent(MainActivity.this, LoginAty.class);
-	// startActivity(it2);
-	// finish();
-	//
-	// case id.main_menu_search:
-	// Intent it3 = new Intent(MainActivity.this, SearchAty.class);
-	// startActivity(it3);
-	// default:
-	// break;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
 
 	public void readNet(String url, Integer mod) {
 		new AsyncTask<Object, Void, Integer>() {
@@ -347,8 +287,8 @@ public class MainActivity extends ActionBarActivity {
 					JSONArray arr = new JSONArray(
 							result.getString("microposts"));
 					String msgunread = result.getString("unreadnum");
-					String randint=result.getString("randint");
-					
+					String randint = result.getString("randint");
+
 					Editor et = sp.edit();
 					et.putString("randint", randint);
 					et.commit();
@@ -362,9 +302,6 @@ public class MainActivity extends ActionBarActivity {
 						mychat_iv.setImageDrawable(MainActivity.this
 								.getResources().getDrawable(
 										R.drawable.ic_action_chat_unread));
-						// badge.setTargetView(mychat_iv);
-						// badge.setVisibility(View.VISIBLE);
-						// badge.setBadgeCount(Integer.parseInt(msgunread));
 
 					}
 
@@ -380,9 +317,6 @@ public class MainActivity extends ActionBarActivity {
 								.getResources()
 								.getDrawable(
 										R.drawable.ic_card_conversation_grey_new));
-						// badge2.setTargetView(reply_iv);
-						// badge2.setVisibility(View.VISIBLE);
-						// badge2.setBadgeCount(Integer.parseInt(microunread));
 
 					}
 
@@ -416,8 +350,8 @@ public class MainActivity extends ActionBarActivity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("unread"), obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 
@@ -443,9 +377,6 @@ public class MainActivity extends ActionBarActivity {
 						mychat_iv.setImageDrawable(MainActivity.this
 								.getResources().getDrawable(
 										R.drawable.ic_action_chat_unread));
-						// badge.setTargetView(mychat_iv);
-						// badge.setVisibility(View.VISIBLE);
-						// badge.setBadgeCount(Integer.parseInt(msgunread));
 
 					}
 
@@ -461,9 +392,6 @@ public class MainActivity extends ActionBarActivity {
 								.getResources()
 								.getDrawable(
 										R.drawable.ic_card_conversation_grey_new));
-						// badge2.setTargetView(reply_iv);
-						// badge2.setVisibility(View.VISIBLE);
-						// badge2.setBadgeCount(Integer.parseInt(microunread));
 
 					}
 
@@ -480,8 +408,8 @@ public class MainActivity extends ActionBarActivity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("unread"), obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -498,23 +426,20 @@ public class MainActivity extends ActionBarActivity {
 					String msgunread = result.getString("unreadnum");
 
 					if (msgunread.equals("0")) {
-//						badge.setVisibility(View.GONE);
-						 mychat_iv.setImageDrawable(MainActivity.this.getResources().getDrawable(
-						 R.drawable.ic_action_chat));
+						// badge.setVisibility(View.GONE);
+						mychat_iv.setImageDrawable(MainActivity.this
+								.getResources().getDrawable(
+										R.drawable.ic_action_chat));
 					} else {
 						mychat_iv.setImageDrawable(MainActivity.this
 								.getResources().getDrawable(
 										R.drawable.ic_action_chat_unread));
-						// badge.setTargetView(mychat_iv);
-						// badge.setVisibility(View.VISIBLE);
-						// badge.setBadgeCount(Integer.parseInt(msgunread));
 
 					}
 
 					String microunread = result.getString("unreadmicro");
 
 					if (microunread.equals("0")) {
-						// badge2.setVisibility(View.GONE);
 						reply_iv.setImageDrawable(MainActivity.this
 								.getResources().getDrawable(
 										R.drawable.ic_card_conversation_grey));
@@ -523,9 +448,6 @@ public class MainActivity extends ActionBarActivity {
 								.getResources()
 								.getDrawable(
 										R.drawable.ic_card_conversation_grey_new));
-						// badge2.setTargetView(reply_iv);
-						// badge2.setVisibility(View.VISIBLE);
-						// badge2.setBadgeCount(Integer.parseInt(microunread));
 
 					}
 
@@ -542,8 +464,8 @@ public class MainActivity extends ActionBarActivity {
 								obj.getString("good"),
 								obj.getString("good_number"),
 								obj.getString("created_at"),
-								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("unread"), obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();

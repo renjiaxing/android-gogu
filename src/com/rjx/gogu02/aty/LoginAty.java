@@ -2,18 +2,24 @@ package com.rjx.gogu02.aty;
 
 import java.io.IOException;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.R.id;
 import com.rjx.gogu02.R.layout;
+import com.rjx.gogu02.domain.Comments;
 import com.rjx.gogu02.service.NotificationService;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.utils.NetworkResources;
@@ -42,16 +48,11 @@ public class LoginAty extends Activity {
 
 	private String username = "";
 	private String passwd = "";
-	private HttpClient client;
-	private String value = "";
 	private EditText et1;
 	private EditText et2;
 	private TextView tv_forgetpwd;
 	private SharedPreferences sp;
-	private String token = "";
 	private CheckBox cb1;
-	private String uid;
-	private String serUrl=ConstantValue.SERVER_URL;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +82,7 @@ public class LoginAty extends Activity {
 
 		cb1.setChecked(true);
 
-		client = new DefaultHttpClient();
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
-//		username = sp.getString("username", "");
-//		token = sp.getString("token", "");
-//		uid = sp.getString("user_id", "");
-//		if (uid != "") {
-//			et1.setText(username);
-//			et2.setText(token);
-//			LoginNet("http://192.168.110.128/login_token_json?uid="
-//					+ uid + "&&token=" + token, 6);
-//		}
 
 		lg_btn.setOnClickListener(new OnClickListener() {
 
@@ -99,9 +90,56 @@ public class LoginAty extends Activity {
 			public void onClick(View v) {
 				username = et1.getText().toString();
 				passwd = et2.getText().toString();
+				
+				RequestParams params = new RequestParams();
+				params.put("username", username);
+				params.put("passwd", passwd);
+				AsyncHttpClient client = new AsyncHttpClient();
+				client.setTimeout(1000);
+				client.get(ConstantValue.LOGIN_URL, params,
+						new JsonHttpResponseHandler() {
+							@Override
+							public void onSuccess(int statusCode,
+									Header[] headers, JSONObject response) {
+								try {
+									if (response.getString("result").equals("ok")) {
+										if (cb1.isChecked()) {
+											Editor et = sp.edit();
+											et.putString("user_id", response.getString("user_id"));
+											et.putString("token", response.getString("token"));
+											et.commit();
+										}
+										Intent it2 = new Intent(LoginAty.this,
+												MainActivity.class);
+										startActivity(it2);
+										finish();
+									} else {
+										showInfo("用户名或者密码错误");
+										et1.setText("");
+										et2.setText("");
+									}
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+							}
 
-				LoginNet(serUrl+"login_json?username="
-						+ username + "&&passwd=" + passwd, 5);
+							@Override
+							public void onFailure(int statusCode,
+									Header[] headers, Throwable throwable,
+									JSONObject errorResponse) {
+								showInfo("无法登陆,请稍后再试~");
+							}
+
+							@Override
+							public void onFailure(int statusCode,
+									Header[] headers,
+									String responseString,
+									Throwable throwable) {
+								showInfo("无法登陆,请稍后再试~");
+								super.onFailure(statusCode, headers,
+										responseString, throwable);
+							}
+						});
 			}
 		});
 		
@@ -124,83 +162,6 @@ public class LoginAty extends Activity {
 		});
 
 	}
-
-	public void LoginNet(String url, Integer mod) {
-		new AsyncTask<Object, Void, Integer>() {
-
-			@Override
-			protected Integer doInBackground(Object... params) {
-
-				String urlString = (String) params[0];
-				Integer mod = (Integer) params[1];
-
-				HttpGet get = new HttpGet(urlString);
-
-				Message msg = new Message();
-				msg.what = mod;
-
-				try {
-					HttpResponse response = client.execute(get);
-					value = EntityUtils.toString(response.getEntity());
-					handler.sendMessage(msg);
-
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				return null;
-
-			}
-
-		}.execute(url, mod);
-
-	}
-
-	Handler handler = new Handler() {
-
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 5:
-				try {
-					JSONObject con = new JSONObject(value.toString());
-					if (con.getString("result").equals("ok")) {
-						if (cb1.isChecked()) {
-							Editor et = sp.edit();
-							et.putString("user_id", con.getString("user_id"));
-							et.putString("token", con.getString("token"));
-							et.commit();
-						}
-						Intent it2 = new Intent(LoginAty.this,
-								MainActivity.class);
-						startActivity(it2);
-						finish();
-					} else {
-						showInfo("无法登陆");
-						et1.setText("");
-						et2.setText("");
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				break;
-			case 6:
-				try {
-					JSONObject con = new JSONObject(value.toString());
-					if (con.getString("result").equals("ok")) {
-						Intent it2 = new Intent(LoginAty.this,
-								MainActivity.class);
-						startActivity(it2);
-						finish();
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				break;
-			}
-		};
-	};
 
 	public void showInfo(String info) {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)

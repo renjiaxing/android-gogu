@@ -1,15 +1,9 @@
 package com.rjx.gogu02.aty;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,10 +11,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.ViewPager.LayoutParams;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +21,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.rjx.gogu02.R;
 import com.rjx.gogu02.utils.ConstantValue;
 
@@ -38,8 +32,6 @@ public class AdviceAty extends Activity {
 	private SharedPreferences sp;
 	private String user_id = "";
 	private String token = "";
-	private String value = "";
-	private HttpClient client;
 	private EditText title_et, content_et;
 
 	@Override
@@ -62,8 +54,6 @@ public class AdviceAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
 		token = sp.getString("token", "");
-
-		client = new DefaultHttpClient();
 
 		title_et = (EditText) findViewById(R.id.advice_title_et);
 		content_et = (EditText) findViewById(R.id.advice_content_et);
@@ -89,84 +79,62 @@ public class AdviceAty extends Activity {
 		});
 
 		send_bt.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 
-				String title, content;
-				try {
-					title = URLEncoder.encode(title_et.getText().toString(),
-							"UTF-8");
-					content = URLEncoder.encode(
-							content_et.getText().toString(), "UTF-8");
-					AdviceNet(ConstantValue.SERVER_URL + "advice_new_json?uid=" + user_id
-							+ "&token=" + token + "&title=" + title
-							+ "&content=" + content, 17);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				if (title_et.getText().toString().equals("")) {
+					showInfo("标题不能为空");
+				} else if (content_et.getText().toString().equals("")) {
+					showInfo("内容不能为空");
+				} else {
+					RequestParams params = new RequestParams();
+					params.put("uid", user_id);
+					params.put("token", token);
+					params.put("title", title_et.getText().toString());
+					params.put("content", content_et.getText().toString());
+					AsyncHttpClient client = new AsyncHttpClient();
+					client.setTimeout(1000);
+					client.post(ConstantValue.NEW_ADVICE_URL, params,
+							new JsonHttpResponseHandler() {
 
+								@Override
+								public void onFailure(int statusCode,
+										Header[] headers,
+										String responseString,
+										Throwable throwable) {
+									showInfo("发送失败，请稍后再试~");
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+										Header[] headers, Throwable throwable,
+										JSONArray errorResponse) {
+									showInfo("发送失败，请稍后再试~");
+									super.onFailure(statusCode, headers,
+											throwable, errorResponse);
+								}
+
+								@Override
+								public void onSuccess(int statusCode,
+										Header[] headers, JSONObject response) {
+									try {
+										if (response.getString("result")
+												.equals("ok")) {
+											finish();
+										} else {
+											showInfo("发送失败，请稍后再试~");
+										}
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+							});
+				}
 			}
 		});
-
 	}
-
-	public void AdviceNet(String url, Integer mod) {
-		new AsyncTask<Object, Void, Integer>() {
-
-			@Override
-			protected Integer doInBackground(Object... params) {
-
-				String urlString = (String) params[0];
-				Integer mod = (Integer) params[1];
-
-				HttpGet get = new HttpGet(urlString);
-
-				Message msg = new Message();
-				msg.what = mod;
-
-				try {
-					HttpResponse response = client.execute(get);
-					value = EntityUtils.toString(response.getEntity());
-					handler.sendMessage(msg);
-
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				return null;
-
-			}
-
-		}.execute(url, mod);
-
-	}
-
-	Handler handler = new Handler() {
-
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 17:
-				try {
-					JSONObject con = new JSONObject(value.toString());
-					if (con.getString("result").equals("ok")) {
-						showInfo("发送成功");
-						finish();
-					} else {
-						showInfo("发送未成功，请重试~");
-						title_et.setText("");
-						content_et.setText("");
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				break;
-			}
-		};
-	};
 
 	public void showInfo(String info) {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)

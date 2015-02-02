@@ -94,7 +94,7 @@ public class StockMicropostListAty extends Activity {
 				handler);
 		mListView.setAdapter(mAdapter);
 
-		readNet(serUrl+"microposts_json?uid=" + user_id
+		readNet(ConstantValue.MICROPOSTS_URL+"?uid=" + user_id
 				+ "&&token=" + token + "&&stock_id=" + stock_id, 0);
 
 		ImageView back = (ImageView) findViewById(R.id.common_logo_back);
@@ -116,7 +116,7 @@ public class StockMicropostListAty extends Activity {
 			@Override
 			public void onPullDownToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
-				readNet(serUrl+"up_microposts_json?up=" + max
+				readNet(ConstantValue.UP_MICROPOSTS_URL+"?up=" + max
 						+ "&&uid=" + user_id + "&&token=" + token
 						+ "&&stock_id=" + stock_id, 1);
 			}
@@ -126,7 +126,7 @@ public class StockMicropostListAty extends Activity {
 			public void onPullUpToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
 
-				readNet(serUrl+"down_microposts_json?down="
+				readNet(ConstantValue.DOWN_MICROPOSTS_URL+"?down="
 						+ min + "&&uid=" + user_id + "&&token=" + token
 						+ "&&stock_id=" + stock_id, 2);
 			}
@@ -146,7 +146,7 @@ public class StockMicropostListAty extends Activity {
 				handler);
 		mListView.setAdapter(mAdapter);
 
-		readNet(serUrl+"microposts_json?uid=" + user_id
+		readNet(ConstantValue.MICROPOSTS_URL+"?uid=" + user_id
 				+ "&&token=" + token + "&&stock_id=" + stock_id, 0);
 	}
 
@@ -215,7 +215,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -243,7 +244,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(0, tmp);
 					}
 					mAdapter.notifyDataSetChanged();
@@ -271,7 +273,8 @@ public class StockMicropostListAty extends Activity {
 								obj.getString("good_number"),
 								obj.getString("created_at"),
 								obj.getString("unread"),
-								obj.getString("image"));
+								obj.getString("image"),
+								obj.getString("stock_full_name"));
 						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
