@@ -2,22 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="25dp"
-    android:layout_marginTop="10dp"
     android:orientation="vertical" >
-    
-    <TextView
-        android:id="@+id/sk_stock_id"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/sk_stock_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
 </LinearLayout>

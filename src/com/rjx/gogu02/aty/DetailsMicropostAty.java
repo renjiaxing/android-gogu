@@ -1,6 +1,5 @@
 package com.rjx.gogu02.aty;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -20,25 +19,22 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract.CommonDataKinds.Im;
-import android.support.v7.app.ActionBarActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -48,23 +44,19 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.rjx.gogu02.R;
-import com.rjx.gogu02.R.id;
-import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.adapter.CommentAdapter;
 import com.rjx.gogu02.domain.Comments;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.utils.ImageLoadTool;
-import com.rjx.gogu02.utils.NetworkResources;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXTextObject;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-public class DetailsMicropostAty extends ActionBarActivity {
+public class DetailsMicropostAty extends Activity {
 
 	private ArrayList<Comments> mListItems;
 	private ListView mListView;
@@ -205,20 +197,20 @@ public class DetailsMicropostAty extends ActionBarActivity {
 				if (et.getText().toString().equals("")) {
 					showInfo("评论不能为空~");
 				} else {
-					try {
-						comment = URLEncoder.encode(et.getText().toString(),
-								"UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
+//					try {
+//						comment = URLEncoder.encode(et.getText().toString(),
+//								"UTF-8");
+//					} catch (UnsupportedEncodingException e) {
+//						e.printStackTrace();
+//					}
 
 					RequestParams params = new RequestParams();
 					params.put("uid", uid);
 					params.put("token", token);
 					params.put("mid", mid);
-					params.put("msg", comment);
+					params.put("msg", et.getText().toString());
 					AsyncHttpClient client = new AsyncHttpClient();
-					client.setTimeout(1000);
+					client.setTimeout(3000);
 					client.post(ConstantValue.NEW_COMMENT_URL, params,
 							new JsonHttpResponseHandler() {
 								@Override

@@ -32,8 +32,10 @@
         
                 <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Gogu02.Widget</item>
+        
 
     </style>
+    
 
     <style name="ActionBar.Solid.Gogu02" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/ab_solid_gogu02</item>

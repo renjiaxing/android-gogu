@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rjx.gogu02.R;
@@ -51,6 +52,7 @@ public class MyChatAty extends Activity {
 	private String token;
 	private MyChatAdapter mAdapter;
 	private String serUrl = ConstantValue.SERVER_URL;
+	private TextView title_tv;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,10 @@ public class MyChatAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
 		token = sp.getString("token", "");
+		
+		title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
+		
+		title_tv.setText("我的私信");
 		
 		if(user_id.equals("")){
 			Intent back_it= new Intent(MyChatAty.this, LoginAty.class);

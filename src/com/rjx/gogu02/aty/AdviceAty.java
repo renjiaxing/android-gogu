@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -61,6 +62,9 @@ public class AdviceAty extends Activity {
 		ImageView back_iv = (ImageView) findViewById(R.id.common_logo_back);
 		Button send_bt = (Button) findViewById(R.id.advice_send);
 		Button back_bt = (Button) findViewById(R.id.advice_back);
+		
+		TextView title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
+		title_tv.setText("意见反馈");
 
 		back_iv.setOnClickListener(new OnClickListener() {
 

@@ -31,7 +31,8 @@ public class SettingsAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 
 		editor = sp.edit();
-
+		String username=sp.getString("username", "");
+		
 		getActionBar().setDisplayShowHomeEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowCustomEnabled(true);
@@ -51,6 +52,12 @@ public class SettingsAty extends Activity {
 		
 		TextView tv_advice=(TextView) findViewById(R.id.setting_advice);
 		TextView tv_changepwd=(TextView) findViewById(R.id.setting_changepwd);
+		
+		TextView title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
+		title_tv.setText("配置");
+		
+		TextView settings_username_tv=(TextView) findViewById(R.id.settings_username);
+		settings_username_tv.setText(username);
 		
 		tv_changepwd.setOnClickListener(new OnClickListener() {
 			

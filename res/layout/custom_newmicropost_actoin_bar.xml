@@ -13,8 +13,12 @@
         android:src="@drawable/logo_green_left_arrow"
         android:background="@drawable/mychangecolor" />
 
-    <ImageView
+    <TextView
+        android:id="@+id/custom_newmicropost_title"
         android:layout_width="0dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/wh"
         android:layout_height="match_parent"
         android:layout_weight="5" />
 

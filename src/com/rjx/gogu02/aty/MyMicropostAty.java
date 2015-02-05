@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -76,6 +77,10 @@ public class MyMicropostAty extends Activity {
 				mTitleView,
 				new ActionBar.LayoutParams(LayoutParams.MATCH_PARENT,
 						LayoutParams.WRAP_CONTENT));
+		
+		TextView title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
+		
+		title_tv.setText("我的信息");
 		
 		ImageView back=(ImageView) findViewById(R.id.common_logo_back);
 		back.setOnClickListener(new OnClickListener() {
@@ -227,6 +232,8 @@ public class MyMicropostAty extends Activity {
 				try {
 					JSONObject result=new JSONObject(value.toString());
 					JSONArray arr =new JSONArray(result.getString("microposts"));
+					
+					mListItems.clear();
 
 					max = arr.getJSONObject(0).getString("id");
 
@@ -244,7 +251,7 @@ public class MyMicropostAty extends Activity {
 								obj.getString("unread"),
 								obj.getString("image"),
 								obj.getString("stock_full_name"));
-						mListItems.add(0, tmp);
+						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
 

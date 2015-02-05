@@ -33,6 +33,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -63,6 +64,8 @@ public class StockMicropostListAty extends Activity {
 	private ArrayList<String> mAllList = new ArrayList<String>();
 	private String serUrl = ConstantValue.SERVER_URL;
 	private ArrayList<String> unreadList=new ArrayList<String>();
+	private TextView title_tv;
+	private String stock_name;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,7 @@ public class StockMicropostListAty extends Activity {
 
 		Bundle bd = getIntent().getExtras();
 		stock_id = bd.getString("stock_id");
+		stock_name = bd.getString("stock_name", "");
 
 		getActionBar().setDisplayShowHomeEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(false);
@@ -86,6 +90,9 @@ public class StockMicropostListAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
 		token = sp.getString("token", "");
+		
+		title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
+		title_tv.setText(stock_name.split(",")[1]);
 
 		client = new DefaultHttpClient();
 		mListItems = new ArrayList<Micropost>();

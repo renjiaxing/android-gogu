@@ -31,6 +31,7 @@ import com.rjx.gogu02.aty.PicDetailAty;
 import com.rjx.gogu02.aty.StockMicropostListAty;
 import com.rjx.gogu02.domain.Micropost;
 import com.rjx.gogu02.utils.ConstantValue;
+import com.rjx.gogu02.utils.GoguUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -148,6 +149,8 @@ public class MicropostsAdapter extends BaseAdapter {
 				.findViewById(R.id.ic_tv_reply);
 		ImageView iv_comment = (ImageView) ll.findViewById(R.id.ic_iv_reply);
 
+		TextView time_ago_tv=(TextView) ll.findViewById(R.id.micropost_item_time);
+		
 		client = new DefaultHttpClient();
 
 		final Micropost tmp = (Micropost) getItem(position);
@@ -160,6 +163,8 @@ public class MicropostsAdapter extends BaseAdapter {
 		ImageView iv_change = (ImageView) ll.findViewById(R.id.ic_iv_change);
 		ImageView iv_msg = (ImageView) ll.findViewById(R.id.ic_iv_msg);
 		final ImageView iv_image=(ImageView) ll.findViewById(R.id.ic_iv_image);
+		
+		time_ago_tv.setText(GoguUtils.TimeAgoFormat(tmp.getCreate_time()));
 
 		if (currentUser.equals(tmp.getUser_id())) {
 			iv_del.setVisibility(ViewGroup.VISIBLE);

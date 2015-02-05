@@ -131,7 +131,7 @@ public class SearchAty extends Activity {
 					for (int i = 0; i < result.length(); i++) {
 						JSONObject item = result.getJSONObject(i);
 						Stock tmp=new Stock(item.getString("id").toString(), item.getString("code").toString() + ","
-								+ item.getString("name").toString());
+								+ item.getString("name").toString()+","+item.getString("shortname"));
 						stockList.add(tmp);
 					}
 

@@ -33,6 +33,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -86,7 +87,9 @@ public class MyReplyAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
 		token = sp.getString("token", "");
-		
+
+		TextView title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
+		title_tv.setText("回复的信息");
 		if(user_id.equals("")){
 			Intent it_main=new Intent(MyReplyAty.this,MainActivity.class);
 			startActivity(it_main);
@@ -126,6 +129,8 @@ public class MyReplyAty extends Activity {
 					PullToRefreshBase<ListView> refreshView) {
 				readNet(ConstantValue.UP_MICROPOSTS_URL + "?up=" + max + "&&uid="
 						+ user_id + "&&token=" + token+"&my_reply_id="+user_id, 1);
+//				readNet(ConstantValue.MICROPOSTS_URL + "?uid=" + user_id + "&token=" + token+"&my_reply_id="+user_id,
+//						0);
 			}
 
 			// ����Pulling Up
@@ -236,7 +241,10 @@ public class MyReplyAty extends Activity {
 					JSONObject result=new JSONObject(value.toString());
 					JSONArray arr =new JSONArray(result.getString("microposts"));
 
+					mListItems.clear();
+
 					max = arr.getJSONObject(0).getString("id");
+					min = arr.getJSONObject(arr.length() - 1).getString("id");
 
 					for (int i = 0; i < arr.length(); i++) {
 						JSONObject obj = arr.getJSONObject(i);
@@ -252,7 +260,7 @@ public class MyReplyAty extends Activity {
 								obj.getString("unread"),
 								obj.getString("image"),
 								obj.getString("stock_full_name"));
-						mListItems.add(0, tmp);
+						mListItems.add(tmp);
 					}
 					mAdapter.notifyDataSetChanged();
 
@@ -264,7 +272,7 @@ public class MyReplyAty extends Activity {
 				try {
 					JSONObject result=new JSONObject(value.toString());
 					JSONArray arr =new JSONArray(result.getString("microposts"));
-
+					
 					min = arr.getJSONObject(arr.length() - 1).getString("id");
 
 					for (int i = 0; i < arr.length(); i++) {

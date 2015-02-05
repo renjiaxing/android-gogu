@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -47,6 +48,7 @@ public class ChangePwdAty extends Activity {
 	private String token = "";
 	private String value = "";
 	private EditText oldpwd_et, newpwd_et, newpwd_repeat_et;
+	private TextView title_tv;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,9 @@ public class ChangePwdAty extends Activity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
 		token = sp.getString("token", "");
+		
+		title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
+		title_tv.setText("修改密码");
 
 		oldpwd_et = (EditText) findViewById(R.id.changepwd_oldpwd_et);
 		newpwd_et = (EditText) findViewById(R.id.changepwd_newpwd_et);

@@ -20,7 +20,7 @@
         android:layout_weight="5"
         android:iconifiedByDefault="false"
         android:inputType="textFilter"
-        android:queryHint="search" 
+        android:queryHint="请输入股票" 
         android:background="@drawable/mychangecolor">
 
     </SearchView>

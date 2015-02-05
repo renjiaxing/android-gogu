@@ -53,10 +53,8 @@ public class StockAdapter extends BaseAdapter {
 			ll = (LinearLayout) LayoutInflater.from(context).inflate(
 					R.layout.stock_item_cell, null);
 		}
-		TextView stock_id= (TextView) ll.findViewById(R.id.sk_stock_id);
 		TextView stock_name=(TextView) ll.findViewById(R.id.sk_stock_name);
 		final Stock tmp=(Stock) getItem(position);
-		stock_id.setText(tmp.getStock_id());
 		stock_name.setText(tmp.getStock_name());
 		
 		stock_name.setOnClickListener(new OnClickListener() {
@@ -67,6 +65,7 @@ public class StockAdapter extends BaseAdapter {
 				stock_id=tmp.getStock_id();
 				Bundle bd2=new Bundle();
 				bd2.putString("stock_id", stock_id);
+				bd2.putString("stock_name", tmp.getStock_name());
 				Intent it3=new Intent(context,StockMicropostListAty.class);
 				it3.putExtras(bd2);
 				context.startActivity(it3);	

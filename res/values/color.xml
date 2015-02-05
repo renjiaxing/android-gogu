@@ -17,4 +17,5 @@
      <color name="gray">#ff888888</color><!--灰-->
      <color name="lb">#a6bff2</color><!-- 淡蓝 -->
      <color name="blue">#ff0000ff</color><!--蓝-->
+     <color name="gray_drawable">#ffeeeeee</color>
 </resources>

@@ -21,6 +21,7 @@ import com.rjx.gogu02.R.id;
 import com.rjx.gogu02.R.layout;
 import com.rjx.gogu02.domain.Comments;
 import com.rjx.gogu02.service.NotificationService;
+import com.rjx.gogu02.update.UpdateManager;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.utils.NetworkResources;
 
@@ -80,6 +81,8 @@ public class LoginAty extends Activity {
 		cb1 = (CheckBox) findViewById(R.id.lg_checkBox1);
 		tv_forgetpwd=(TextView) findViewById(R.id.lg_forgetpwd);
 
+		UpdateManager updateManager = new UpdateManager(this);
+		updateManager.checkUpdateInfo();
 		cb1.setChecked(true);
 
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
@@ -107,6 +110,7 @@ public class LoginAty extends Activity {
 											Editor et = sp.edit();
 											et.putString("user_id", response.getString("user_id"));
 											et.putString("token", response.getString("token"));
+											et.putString("username", username);
 											et.commit();
 										}
 										Intent it2 = new Intent(LoginAty.this,

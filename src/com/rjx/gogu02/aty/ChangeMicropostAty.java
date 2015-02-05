@@ -42,6 +42,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -57,7 +58,7 @@ import com.rjx.gogu02.utils.ImageLoadTool;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
 
-public class ChangeMicropostAty extends ActionBarActivity {
+public class ChangeMicropostAty extends Activity {
 
 	private String value = "";
 	private HttpClient client;
@@ -79,6 +80,7 @@ public class ChangeMicropostAty extends ActionBarActivity {
 	private static final int BIGGER = 1;
 	private static final int SMALLER = 2;
 	private int max = 0;
+	private int dif=0;
 	private String serUrl = ConstantValue.SERVER_URL;
 	private String content = "";
 	private String mid = "";
@@ -108,6 +110,10 @@ public class ChangeMicropostAty extends ActionBarActivity {
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		uid = sp.getString("user_id", "");
 		token = sp.getString("token", "");
+		
+		TextView title_tv=(TextView) findViewById(R.id.custom_newmicropost_title);
+		title_tv.setText("修改信息");
+		
 		iv_add_pic=(ImageView) findViewById(R.id.nm_iv_addpic);
 		
 		iv_add_pic.setOnClickListener(new OnClickListener() {
@@ -160,6 +166,7 @@ public class ChangeMicropostAty extends ActionBarActivity {
 				if (max < h) {
 					max = h;
 				}
+				dif=max-h;
 				Message msg = new Message();
 				if (h == max) {
 					change = BIGGER;
@@ -349,13 +356,13 @@ public class ChangeMicropostAty extends ActionBarActivity {
 			switch (msg.what) {
 			case BIGGER:
 				linearParams.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 300 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
+						.getResources().getDisplayMetrics().density * 280 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
 				et1.setLayoutParams(linearParams);
 				break;
 
 			case SMALLER:
-				linearParams.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 220 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
+				linearParams.height = (int) (max-dif-getApplicationContext()
+						.getResources().getDisplayMetrics().density * 56 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
 				et1.setLayoutParams(linearParams);
 				break;
 			}

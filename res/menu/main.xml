@@ -1,33 +1,57 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.rjx.gogu02.MainActivity" >
-    
-    <item  
-        android:id="@+id/action_share"  
-        app:actionProviderClass="com.rjx.gogu02.MyActionProvider"  
-        android:icon="@drawable/ic_launcher"  
-        app:showAsAction="ifRoom"  
-        android:title="action_share" /> 
-      
+
     <item
         android:id="@+id/main_menu_search"
-        android:orderInCategory="100"
         android:icon="@drawable/ic_menu_search"
-        app:showAsAction="ifRoom"
+        android:orderInCategory="100"
+        android:showAsAction="always"
         android:title="搜索"/>
     <item
-        android:id="@+id/main_menu_msg"
+        android:id="@+id/main_menu_new_micropost"
         android:icon="@drawable/ic_action_new_secret"
         android:orderInCategory="100"
-        android:title="发布消息"
-        app:showAsAction="ifRoom"/>
+        android:showAsAction="always"
+        android:title="发布消息"/>
     <item
-        android:id="@+id/main_menu_logout"
-        android:icon="@drawable/ic_action_info_single_chat"
+        android:id="@+id/main_menu_more"
         android:orderInCategory="100"
-        android:title="注销账户"
-        app:showAsAction="ifRoom"/>
-
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_more"
+        android:title="更多">
+        <menu>
+            <item
+                android:id="@+id/main_menu_mychat"
+                android:icon="@drawable/ic_action_chat"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="我的私信"/>
+            <item
+                android:id="@+id/main_menu_my_micropost"
+                android:icon="@drawable/ic_card_conversation_grey"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="我的消息"/>
+            <item
+                android:id="@+id/main_menu_my_reply"
+                android:icon="@drawable/ic_action_info_single_chat"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="回复消息"/>
+            <item
+                android:id="@+id/main_menu_setting"
+                android:icon="@drawable/ic_settings"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="配置信息"/>
+            <item
+                android:id="@+id/main_menu_logout"
+                android:icon="@drawable/logout"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="退出登录"/>
+        </menu>
+    </item>
 
 </menu>

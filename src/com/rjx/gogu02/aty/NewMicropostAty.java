@@ -31,7 +31,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -42,6 +41,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -54,7 +54,7 @@ import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.view.ResizeLayout;
 import com.rjx.gogu02.view.ResizeLayout.OnResizeListener;
 
-public class NewMicropostAty extends ActionBarActivity {
+public class NewMicropostAty extends Activity {
 
 	private String value = "";
 	private HttpClient client;
@@ -77,6 +77,7 @@ public class NewMicropostAty extends ActionBarActivity {
 	private static final int SMALLER = 2;
 	private static final int NOT_RIGHT_STOCK_FORMAT = 3;
 	private int max = 0;
+	private int dif=0;
 	private String serUrl = ConstantValue.SERVER_URL;
 	private ImageView iv_add_pic;
 	private Boolean hasPic = false;
@@ -104,6 +105,9 @@ public class NewMicropostAty extends ActionBarActivity {
 		uid = sp.getString("user_id", "");
 		token = sp.getString("token", "");
 
+		TextView title_tv=(TextView) findViewById(R.id.custom_newmicropost_title);
+		title_tv.setText("新建信息");
+		
 		et1 = (EditText) findViewById(R.id.nm_editText1);
 		actx = (AutoCompleteTextView) findViewById(R.id.nm_auto);
 		iv_add_pic = (ImageView) findViewById(R.id.nm_iv_addpic);
@@ -115,8 +119,6 @@ public class NewMicropostAty extends ActionBarActivity {
 			public void onClick(View v) {
 				if (hasPic == false) {
 					Intent intent = new Intent();
-					// intent.setType("image/*");
-					// intent.setAction(Intent.ACTION_GET_CONTENT);
 					intent = new Intent(
 							Intent.ACTION_PICK,
 							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -137,9 +139,12 @@ public class NewMicropostAty extends ActionBarActivity {
 			@Override
 			public void OnResize(int w, int h, int oldw, int oldh) {
 				int change = SMALLER;
+				System.out.println("h:"+h+" oh:"+oldh);
+				System.out.println("dif:"+(h-oldh));
 				if (max < h) {
 					max = h;
 				}
+				dif=max-h;
 				Message msg = new Message();
 				if (h == max) {
 					change = BIGGER;
@@ -307,13 +312,14 @@ public class NewMicropostAty extends ActionBarActivity {
 			switch (msg.what) {
 			case BIGGER:
 				linearParams.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 300 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
+						.getResources().getDisplayMetrics().density * 280 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
 				et1.setLayoutParams(linearParams);
 				break;
 
 			case SMALLER:
-				linearParams.height = (int) (getApplicationContext()
-						.getResources().getDisplayMetrics().density * 210 + 0.5f);// ���ؼ��ĸ�ǿ�����50����
+				float density=getApplicationContext()
+						.getResources().getDisplayMetrics().density;
+				linearParams.height = (int) (max-dif-56*density + 0.5f);// ���ؼ��ĸ�ǿ�����50����
 				et1.setLayoutParams(linearParams);
 				break;
 
