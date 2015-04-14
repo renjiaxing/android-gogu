@@ -8,12 +8,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.LayoutParams;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -50,8 +52,8 @@ public class SettingsAty extends Activity {
 
 		ImageView back_iv = (ImageView) findViewById(R.id.common_logo_back);
 		
-		TextView tv_advice=(TextView) findViewById(R.id.setting_advice);
-		TextView tv_changepwd=(TextView) findViewById(R.id.setting_changepwd);
+//		TextView tv_advice=(TextView) findViewById(R.id.setting_advice);
+//		TextView tv_changepwd=(TextView) findViewById(R.id.setting_changepwd);
 		
 		TextView title_tv=(TextView) findViewById(R.id.custom_actionbar_title);
 		title_tv.setText("配置");
@@ -59,7 +61,10 @@ public class SettingsAty extends Activity {
 		TextView settings_username_tv=(TextView) findViewById(R.id.settings_username);
 		settings_username_tv.setText(username);
 		
-		tv_changepwd.setOnClickListener(new OnClickListener() {
+		RelativeLayout lo_changepwd=(RelativeLayout) findViewById(R.id.setting_changepwd_relativelayout);
+		RelativeLayout lo_advice=(RelativeLayout) findViewById(R.id.setting_advice_relativelayout);
+		
+		lo_changepwd.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -68,7 +73,7 @@ public class SettingsAty extends Activity {
 			}
 		});
 		
-		tv_advice.setOnClickListener(new OnClickListener() {
+		lo_advice.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

@@ -107,7 +107,7 @@ public class MainActivity extends Activity {
 
 		sp = getSharedPreferences("login1", MODE_PRIVATE);
 		user_id = sp.getString("user_id", "");
-		token = sp.getString("token", "");
+		token = sp.getString("token", "");		
 
 		if (user_id.equals("")) {
 			Intent back_it = new Intent(MainActivity.this, LoginAty.class);
@@ -237,8 +237,11 @@ public class MainActivity extends Activity {
 		MenuItem item_unreplymicro = menu.findItem(R.id.main_menu_my_reply);
 		MenuItem item_more = menu.findItem(R.id.main_menu_more);
 
-		if (msgunread.equals("0") && microunread.equals("0")
-				&& unreplymicro.equals("0")) {
+		item_more.setIcon(R.drawable.ic_action_more);
+		
+		if ((msgunread.equals("0") && microunread.equals("0")
+				&& unreplymicro.equals("0"))||(msgunread.equals("") && microunread.equals("")
+						&& unreplymicro.equals(""))) {
 			item_more.setIcon(R.drawable.ic_action_more);
 		} else {
 			item_more.setIcon(R.drawable.ic_action_more_notice);

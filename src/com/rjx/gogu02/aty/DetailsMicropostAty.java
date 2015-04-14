@@ -26,6 +26,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -358,7 +360,9 @@ public class DetailsMicropostAty extends Activity {
 					JSONObject con = new JSONObject(value.toString());
 					JSONArray arr = new JSONArray(con.getString("comments"));
 					randint = con.getString("randint");
-					tv.setText(con.getString("content"));
+					CharSequence contentSequence = Html.fromHtml(con.getString("content"));
+					tv.setText(contentSequence);
+					tv.setMovementMethod(LinkMovementMethod.getInstance());
 					JSONObject imageObject = new JSONObject(
 							con.getString("image"));
 

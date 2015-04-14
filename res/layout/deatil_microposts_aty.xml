@@ -13,27 +13,22 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/dm_showText1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
-                android:ems="10"
                 android:gravity="center"
-                android:layout_gravity="center"
                 android:inputType="textMultiLine"
-                android:maxLines="6"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
                 android:paddingTop="30dp"
-                android:scrollbars="vertical"
-                android:textSize="25sp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/wh" />
+                android:textColor="@color/wh"
+                android:textSize="25sp" />
 
             <ImageView
                 android:id="@+id/dm_iv_image"
@@ -104,7 +99,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp" >
-
         </ListView>
     </LinearLayout>
 

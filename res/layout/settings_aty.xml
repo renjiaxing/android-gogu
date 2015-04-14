@@ -156,6 +156,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/setting_advice_relativelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -175,6 +176,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/setting_changepwd_relativelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -193,5 +195,4 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-    
 </LinearLayout>

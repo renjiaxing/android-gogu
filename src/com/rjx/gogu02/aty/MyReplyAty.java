@@ -325,5 +325,13 @@ public class MyReplyAty extends Activity {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)
 				.show();
 	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent it=new Intent(MyReplyAty.this, MainActivity.class);
+		startActivity(it);
+		MyReplyAty.this.finish();
+		super.onBackPressed();
+	}
 
 }

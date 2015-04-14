@@ -46,6 +46,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings.Global;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -155,7 +156,8 @@ public class MicropostsAdapter extends BaseAdapter {
 
 		final Micropost tmp = (Micropost) getItem(position);
 		// idtv.setText(tmp.getId());
-		tv_content.setText(tmp.getContent());
+		CharSequence contentSequence = Html.fromHtml(tmp.getContent());
+		tv_content.setText(contentSequence);
 		tv_stock.setText(tmp.getStock_name());
 		tv_good_number.setText(tmp.getGood_number());
 		tv_comment_number.setText(tmp.getComment_size());
