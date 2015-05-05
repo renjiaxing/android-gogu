@@ -70,7 +70,7 @@ public class StockMicropostListAty extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.main_stock_aty);
 
 		Bundle bd = getIntent().getExtras();
 		stock_id = bd.getString("stock_id");

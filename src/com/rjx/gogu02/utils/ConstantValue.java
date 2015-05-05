@@ -2,7 +2,7 @@ package com.rjx.gogu02.utils;
 
 public class ConstantValue {
 
-    static public String SERVER_URL = "http://192.168.110.143/";
+    static public String SERVER_URL = "http://192.168.110.146/";
 //	static public String SERVER_URL = "http://121.41.25.221/";
 	static public Integer MESSAGE_SEND = 1;
 	static public Integer MESSAGE_RECEIVE = 2;
@@ -36,4 +36,11 @@ public class ConstantValue {
 	static public String LOGIN_TOKEN_URL = SERVER_URL
 			+ "apijson/login_token_json";
 	static public String REG_URL = SERVER_URL + "apijson/reg_json";
+	static public String MYSTOCK_URL = SERVER_URL + "apijson/mystock_json";
+	static public String ADDSTOCK_URL = SERVER_URL + "apijson/addstock_json";
+	static public String DELSTOCK_URL = SERVER_URL + "apijson/delstock_json";
+	static public String CHECK_URL = SERVER_URL + "stock_json";
+	static public String CHECK_STOCK_URL = SERVER_URL + "apijson/check_stock_json";
+	static public String MAIN_URL = SERVER_URL + "apijson/main_json";
+	
 }

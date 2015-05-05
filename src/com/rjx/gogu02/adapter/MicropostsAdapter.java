@@ -189,6 +189,7 @@ public class MicropostsAdapter extends BaseAdapter {
 					bl.putString("stock_full_name", tmp.getStock_full_name());
 					bl.putString("image", tmp.getImage());
 					Intent it = new Intent(context, ChangeMicropostAty.class);
+					it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 					it.putExtras(bl);
 					context.startActivity(it);
 					// ((Activity) context).finish();
@@ -217,6 +218,7 @@ public class MicropostsAdapter extends BaseAdapter {
 				Bundle bd2 = new Bundle();
 				bd2.putString("stock_id", stock_id);
 				Intent it3 = new Intent(context, StockMicropostListAty.class);
+				it3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				it3.putExtras(bd2);
 				context.startActivity(it3);
 			}
@@ -260,6 +262,7 @@ public class MicropostsAdapter extends BaseAdapter {
 				data.putString("mid", id_st);
 				data.putString("content", id_content);
 				Intent it2 = new Intent(context, DetailsMicropostAty.class);
+				it2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				it2.putExtras(data);
 				context.startActivity(it2);
 			}
@@ -275,6 +278,7 @@ public class MicropostsAdapter extends BaseAdapter {
 				data.putString("content", id_content);
 				data.putString("mid", id_st);
 				Intent it2 = new Intent(context, DetailsMicropostAty.class);
+				it2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				it2.putExtras(data);
 				context.startActivity(it2);
 			}
@@ -287,6 +291,7 @@ public class MicropostsAdapter extends BaseAdapter {
 				Bundle bl = new Bundle();
 				bl.putString("uid", tmp.getUser_id());
 				Intent it2 = new Intent(context, NewMessageAty.class);
+				it2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				it2.putExtras(bl);
 				context.startActivity(it2);
 			}
@@ -314,6 +319,7 @@ public class MicropostsAdapter extends BaseAdapter {
 					Bundle bd=new Bundle();
 					bd.putString("url", url);
 					Intent it=new Intent(context, PicDetailAty.class);
+					it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 					it.putExtra("pic", bd);
 					context.startActivity(it);
 				}

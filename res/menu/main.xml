@@ -21,6 +21,12 @@
         android:icon="@drawable/ic_action_more"
         android:title="更多">
         <menu>
+             <item
+                android:id="@+id/main_menu_mystock"
+                android:icon="@drawable/mystock"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="关注股票"/>
             <item
                 android:id="@+id/main_menu_mychat"
                 android:icon="@drawable/ic_action_chat"

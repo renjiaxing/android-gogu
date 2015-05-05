@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- File created by the Android Action Bar Style Generator
+<!--
+     File created by the Android Action Bar Style Generator
 
      Copyright (C) 2011 The Android Open Source Project
      Copyright (C) 2012 readyState Software Ltd
@@ -29,13 +30,30 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_gogu02</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_gogu02</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Gogu02</item>
-        
-                <!-- Light.DarkActionBar specific -->
-        <item name="android:actionBarWidgetTheme">@style/Theme.Gogu02.Widget</item>
-        
 
+        <!-- Light.DarkActionBar specific -->
+        <item name="android:actionBarWidgetTheme">@style/Theme.Gogu02.Widget</item>
+        <item name="vpiTabPageIndicatorStyle">@style/MyWidget.TabPageIndicator</item>
+        <item name="android:animationDuration">5000</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
-    
+
+    <style name="MyWidget.TabPageIndicator" parent="Widget">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/title_background</item>
+        <item name="android:paddingLeft">22dip</item>
+        <item name="android:paddingRight">22dip</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textAppearance">@style/MyTextAppearance.TabPageIndicator</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@drawable/tab_title</item> 
+    </style>
+
+    <style name="MyTextAppearance.TabPageIndicator" parent="Widget">
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="ActionBar.Solid.Gogu02" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/ab_solid_gogu02</item>
@@ -50,7 +68,7 @@
     </style>
 
     <style name="PopupMenu.Gogu02" parent="@android:style/Widget.Holo.ListPopupWindow">
-        <item name="android:popupBackground">@drawable/menu_dropdown_panel_gogu02</item>	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_gogu02</item>
     </style>
 
     <style name="DropDownListView.Gogu02" parent="@android:style/Widget.Holo.ListView.DropDown">
@@ -66,11 +84,11 @@
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_gogu02</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_gogu02</item>
     </style>
-    
+
     <style name="ProgressBar.Gogu02" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_gogu02</item>
     </style>
-    
+
     <style name="ActionButton.CloseMode.Gogu02" parent="@android:style/Widget.Holo.ActionButton.CloseMode">
         <item name="android:background">@drawable/btn_cab_done_gogu02</item>
     </style>

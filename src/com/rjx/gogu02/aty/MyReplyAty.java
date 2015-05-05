@@ -68,7 +68,7 @@ public class MyReplyAty extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main_backup);
 
 //		Bundle bd = getIntent().getExtras();
 //		stock_id = bd.getString("stock_id");

@@ -25,8 +25,10 @@
             android:gravity="center"
             android:maxLines="4"
             android:text="TextView"
+            android:textColor="@color/bl"
             android:textSize="28sp"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -87,6 +89,7 @@
             android:gravity="left"
             android:maxLines="4"
             android:text=""
+            android:textColor="@color/bl"
             android:textStyle="bold" />
 
         <ImageView
