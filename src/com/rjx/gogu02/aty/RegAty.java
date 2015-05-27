@@ -37,7 +37,7 @@ import com.rjx.gogu02.R;
 import com.rjx.gogu02.utils.ConstantValue;
 
 public class RegAty extends Activity {
-	private EditText codeEt;
+//	private EditText codeEt;
 	private EditText emailEt;
 	private EditText phoneEt;
 	private EditText passwdEt;
@@ -62,7 +62,7 @@ public class RegAty extends Activity {
 				new ActionBar.LayoutParams(LayoutParams.MATCH_PARENT,
 						LayoutParams.WRAP_CONTENT));
 
-		codeEt = (EditText) findViewById(R.id.rg_code_et);
+//		codeEt = (EditText) findViewById(R.id.rg_code_et);
 		emailEt = (EditText) findViewById(R.id.rg_email_et);
 		phoneEt = (EditText) findViewById(R.id.rg_phone_et);
 		passwdEt = (EditText) findViewById(R.id.rg_passwd_et);
@@ -78,9 +78,9 @@ public class RegAty extends Activity {
 			@Override
 			public void onClick(View v) {
 				Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
-				if (codeEt.getText().toString().equals("")) {
-					showInfo("验证码不能为空");
-				} else if (!(pattern.matcher(emailEt.getText().toString())
+//				if (codeEt.getText().toString().equals("")) {
+//					showInfo("验证码不能为空");
+			   if (!(pattern.matcher(emailEt.getText().toString())
 						.matches())) {
 					showInfo("请输入正确的邮件地址");
 				} else if (passwdEt.getText().toString().equals("")) {
@@ -90,7 +90,7 @@ public class RegAty extends Activity {
 					showInfo("请确认密码输入一致");
 				} else {
 					RequestParams params = new RequestParams();
-					params.put("code", codeEt.getText().toString());
+//					params.put("code", codeEt.getText().toString());
 					params.put("email", emailEt.getText().toString());
 					params.put("phone", phoneEt.getText().toString());
 					params.put("passwd", passwdEt.getText().toString());
@@ -102,9 +102,9 @@ public class RegAty extends Activity {
 								public void onSuccess(int statusCode,
 										Header[] headers, JSONObject response) {
 									try {
-										if(!(response.getString("checkcode").equals("ok"))){
-											showInfo("邀请码错误~");
-										}else if(response.getString("checkemail")
+//										if(!(response.getString("checkcode").equals("ok"))){
+//											showInfo("邀请码错误~");
+										 if(response.getString("checkemail")
 												.equals("ok")) {
 											if (response.getString("result")
 													.equals("ok")) {
