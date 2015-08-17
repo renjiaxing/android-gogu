@@ -46,6 +46,18 @@
                 android:showAsAction="never"
                 android:title="回复消息"/>
             <item
+                android:id="@+id/main_menu_vote"
+                android:icon="@drawable/ic_action_info_single_chat"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="所有投票"/>
+            <item
+                android:id="@+id/main_menu_myvote"
+                android:icon="@drawable/ic_action_info_single_chat"
+                android:orderInCategory="100"
+                android:showAsAction="never"
+                android:title="我的投票"/>
+            <item
                 android:id="@+id/main_menu_setting"
                 android:icon="@drawable/ic_settings"
                 android:orderInCategory="100"

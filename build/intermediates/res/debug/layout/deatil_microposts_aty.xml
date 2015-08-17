@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.rjx.gogu02.view.ResizeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dm_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/dm_sc"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="@color/gogu_green" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/dm_showText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="30dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/wh"
+                android:textSize="25sp" />
+
+            <ImageView
+                android:id="@+id/dm_iv_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/gogu_green" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/wh"
+            android:gravity="left" >
+
+            <EditText
+                android:id="@+id/dm_editText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="请输入评论" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/dm_btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="发送" />
+
+            <ImageView
+                android:id="@+id/dm_weixin"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_share_weixin" />
+
+            <ImageView
+                android:id="@+id/dm_friends"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_share_pengyouquan" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/dm_listView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp" >
+        </ListView>
+    </LinearLayout>
+
+</com.rjx.gogu02.view.ResizeLayout><!-- From: file:/Users/renjiaxing/Documents/workspace/adtworkspace/gogu02/res/layout/deatil_microposts_aty.xml -->

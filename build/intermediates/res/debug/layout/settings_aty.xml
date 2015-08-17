@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_drawable"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/wh"
+        android:gravity="center_vertical"
+        android:minHeight="40dp"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/settings_username_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="用户名"
+            android:textColor="#222222"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/settings_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/settings_username_title"
+            android:layout_toRightOf="@+id/settings_username_title"
+            android:gravity="right"
+            android:textColor="#222222"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/wh"
+        android:gravity="center_vertical"
+        android:minHeight="40dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp" >
+
+        <TextView
+            android:id="@+id/set_sys_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="回复推送"
+            android:textColor="#222222"
+            android:textSize="18sp" />
+
+        <ToggleButton
+            android:id="@+id/set_sys_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignBaseline="@+id/set_sys_info"
+            android:layout_alignParentRight="true"
+            android:text="ToggleButton"
+            android:textOff="关"
+            android:textOn="开" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/wh"
+        android:gravity="center_vertical"
+        android:minHeight="40dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp" >
+
+        <TextView
+            android:id="@+id/set_reply_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="回复的回复推送"
+            android:textColor="#222222"
+            android:textSize="18sp" />
+
+        <ToggleButton
+            android:id="@+id/set_reply_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignBaseline="@+id/set_reply_info"
+            android:layout_alignParentRight="true"
+            android:text="ToggleButton"
+            android:textOff="关"
+            android:textOn="开" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/wh"
+        android:gravity="center_vertical"
+        android:minHeight="40dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp" >
+
+        <TextView
+            android:id="@+id/set_msg_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="私信推送"
+            android:textColor="#222222"
+            android:textSize="18sp" />
+
+        <ToggleButton
+            android:id="@+id/set_msg_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignBaseline="@+id/set_msg_info"
+            android:layout_alignParentRight="true"
+            android:text="ToggleButton"
+            android:textOff="关"
+            android:textOn="开" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/wh"
+        android:gravity="center_vertical"
+        android:minHeight="40dp"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/setting_sys_version_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="版本信息"
+            android:textColor="#222222"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/setting_sys_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/setting_sys_version_title"
+            android:layout_toRightOf="@+id/setting_sys_version_title"
+            android:gravity="right"
+            android:textColor="#222222"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/setting_advice_relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/wh"
+        android:gravity="center_vertical"
+        android:minHeight="40dp"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/setting_advice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="意见反馈"
+            android:textColor="#222222"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/setting_changepwd_relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/wh"
+        android:gravity="center_vertical"
+        android:minHeight="40dp"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/setting_changepwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="修改密码"
+            android:textColor="#222222"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</LinearLayout><!-- From: file:/Users/renjiaxing/Documents/workspace/adtworkspace/gogu02/res/layout/settings_aty.xml -->

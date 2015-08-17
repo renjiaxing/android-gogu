@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.rjx.gogu01.MainActivity" >
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/stock_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+</LinearLayout><!-- From: file:/Users/renjiaxing/Documents/workspace/adtworkspace/gogu02/res/layout/stock_aty.xml -->

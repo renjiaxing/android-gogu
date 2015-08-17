@@ -3,6 +3,7 @@ package com.rjx.gogu02.adapter;
 import com.rjx.gogu02.fragment.TabFragment;
 
 import android.R.string;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,7 +23,10 @@ public class TabAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int arg0) {
-		TabFragment fragment = new TabFragment(arg0);
+		TabFragment fragment = new TabFragment();
+		Bundle bundle=new Bundle();
+		bundle.putInt("pos",arg0);
+		fragment.setArguments(bundle);
 		return fragment;
 	}
 

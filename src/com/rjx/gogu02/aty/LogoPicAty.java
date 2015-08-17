@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -37,6 +38,8 @@ import com.rjx.gogu02.service.NotificationService;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.bugly.crashreport.CrashReport.UserStrategy;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengRegistrar;
 
 public class LogoPicAty extends Activity {
 	private String username = "";
@@ -46,6 +49,8 @@ public class LogoPicAty extends Activity {
 	private String token = "";
 	private String uid;
 	private String serUrl = ConstantValue.SERVER_URL;
+
+	private  PushAgent mPushAgent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,14 @@ public class LogoPicAty extends Activity {
 		username = sp.getString("username", "");
 		token = sp.getString("token", "");
 		uid = sp.getString("user_id", "");
+
+		mPushAgent = PushAgent.getInstance(this);
+		mPushAgent.enable();
+		PushAgent.getInstance(this).onAppStart();
+		mPushAgent.setNotificaitonOnForeground(false);
+
+		String device_token = UmengRegistrar.getRegistrationId(this);
+		System.out.print(device_token);
 
 		// 初始化bugly
 		Context appContext = this.getApplicationContext();
@@ -167,5 +180,7 @@ public class LogoPicAty extends Activity {
 		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)
 				.show();
 	}
+
+
 
 }

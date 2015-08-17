@@ -19,6 +19,12 @@ public class Micropost {
 			String stock_id, String stock_name, String comment_size,
 			String good, String good_number, String create_at, String unread,String image,String stock_full_name) {
 		this.id = id;
+
+		int indexW=content.indexOf("http://www.hkexnews.hk");
+		if (indexW!=-1){
+			content=content.substring(0,indexW)+
+					"<a href="+content.substring(indexW,content.length())+">点击链接"+"</a>";
+		}
 		this.content = content;
 		this.user_id = user_id;
 		this.stock_id = stock_id;

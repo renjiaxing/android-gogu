@@ -233,7 +233,7 @@ public class MyMicropostAty extends Activity {
 					JSONObject result=new JSONObject(value.toString());
 					JSONArray arr =new JSONArray(result.getString("microposts"));
 					
-					mListItems.clear();
+//					mListItems.clear();
 
 					max = arr.getJSONObject(0).getString("id");
 

@@ -360,7 +360,16 @@ public class DetailsMicropostAty extends Activity {
 					JSONObject con = new JSONObject(value.toString());
 					JSONArray arr = new JSONArray(con.getString("comments"));
 					randint = con.getString("randint");
-					CharSequence contentSequence = Html.fromHtml(con.getString("content"));
+
+					String content=con.getString("content");
+
+					int indexW=content.indexOf("http://www.hkexnews.hk");
+					if (indexW!=-1){
+						content=content.substring(0,indexW)+
+								"<a href="+content.substring(indexW,content.length())+">点击链接"+"</a>";
+					}
+
+					CharSequence contentSequence = Html.fromHtml(content);
 					tv.setText(contentSequence);
 					tv.setMovementMethod(LinkMovementMethod.getInstance());
 					JSONObject imageObject = new JSONObject(

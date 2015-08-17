@@ -12,18 +12,33 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.rjx.gogu02.R;
+import com.rjx.gogu02.utils.ConstantValue;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SettingsAty extends Activity {
 	private SharedPreferences sp;
 	SharedPreferences.Editor editor;
+	private String uid="";
+	private String token="";
+	private ToggleButton sys_tb;
+	private ToggleButton msg_tb;
+	private ToggleButton reply_tb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +49,10 @@ public class SettingsAty extends Activity {
 
 		editor = sp.edit();
 		String username=sp.getString("username", "");
-		
+
+		uid = sp.getString("user_id", "");
+		token = sp.getString("token", "");
+
 		getActionBar().setDisplayShowHomeEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowCustomEnabled(true);
@@ -46,9 +64,9 @@ public class SettingsAty extends Activity {
 				new ActionBar.LayoutParams(LayoutParams.MATCH_PARENT,
 						LayoutParams.WRAP_CONTENT));
 
-		Integer sys_status = sp.getInt("sys_status", 1);
-		Integer reply_status = sp.getInt("reply_status", 1);
-		Integer msg_status = sp.getInt("msg_status", 1);
+		String micro_status = sp.getString("android_micro_push", "true");
+		String reply_status = sp.getString("android_reply_push", "true");
+		String msg_status = sp.getString("android_chat_push", "true");
 
 		ImageView back_iv = (ImageView) findViewById(R.id.common_logo_back);
 		
@@ -90,8 +108,8 @@ public class SettingsAty extends Activity {
 			}
 		});
 
-		ToggleButton sys_tb = (ToggleButton) findViewById(R.id.set_sys_switch);
-		if (sys_status == 1) {
+		sys_tb = (ToggleButton) findViewById(R.id.set_sys_switch);
+		if (micro_status.equals("true")) {
 			sys_tb.setChecked(true);
 		} else {
 			sys_tb.setChecked(false);
@@ -103,28 +121,101 @@ public class SettingsAty extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 
+				AsyncHttpClient httpClient = new AsyncHttpClient();
+
+				RequestParams params = new RequestParams();
+				params.put("uid", uid);
+				params.put("token", token);
+
+				httpClient.setTimeout(3000);
+
+
 				if (isChecked) {
 					// mod=2;
 					// Intent it=new Intent();
 					// it.setAction("com.rjx.gogu.PUSHINFO");
 					// it.putExtra("mod", mod);
 					// sendBroadcast(it);
-					editor.putInt("sys_status", 1);
-					editor.commit();
+//					editor.putInt("sys_status", 1);
+//					editor.commit();
+
+					httpClient.post(ConstantValue.ACTIVE_ANDROID_MICRO_PUSH, params,
+							new JsonHttpResponseHandler() {
+
+								@Override
+								public void onSuccess(int statusCode,
+													  Header[] headers, JSONObject result) {
+									try {
+										if (result.getString("result").equals("ok")) {
+											showInfo("设置成功~");
+										} else {
+											showInfo("设置失败，请稍候再试~");
+											sys_tb.setChecked(false);
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+
+									super.onSuccess(statusCode, headers, result);
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+													  Header[] headers, String responseString,
+													  Throwable throwable) {
+									showInfo("网络错误，请稍后再试~");
+									sys_tb.setChecked(false);
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
 				} else {
 					// mod=1;
 					// Intent it=new Intent();
 					// it.setAction("com.rjx.gogu.PUSHINFO");
 					// it.putExtra("mod", mod);
 					// sendBroadcast(it);
-					editor.putInt("sys_status", 0);
-					editor.commit();
+//					editor.putInt("sys_status", 0);
+//					editor.commit();
+
+					httpClient.post(ConstantValue.DEACTIVE_ANDROID_MICRO_PUSH, params,
+							new JsonHttpResponseHandler() {
+
+								@Override
+								public void onSuccess(int statusCode,
+													  Header[] headers, JSONObject result) {
+									try {
+										if (result.getString("result").equals("ok")) {
+											showInfo("设置成功~");
+										} else {
+											showInfo("设置失败，请稍候再试~");
+											sys_tb.setChecked(true);
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+
+									super.onSuccess(statusCode, headers, result);
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+													  Header[] headers, String responseString,
+													  Throwable throwable) {
+									showInfo("网络错误，请稍后再试~");
+									sys_tb.setChecked(true);
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
 				}
 			}
 		});
 
-		ToggleButton reply_tb = (ToggleButton) findViewById(R.id.set_reply_switch);
-		if (reply_status == 1) {
+		reply_tb = (ToggleButton) findViewById(R.id.set_reply_switch);
+		if (reply_status.equals("true")) {
 			reply_tb.setChecked(true);
 		} else {
 			reply_tb.setChecked(false);
@@ -135,19 +226,89 @@ public class SettingsAty extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
+				AsyncHttpClient httpClient = new AsyncHttpClient();
+
+				RequestParams params = new RequestParams();
+				params.put("uid", uid);
+				params.put("token", token);
+
+				httpClient.setTimeout(3000);
+
 				if (isChecked) {
-					editor.putInt("reply_status", 1);
-					editor.commit();
+//					editor.putInt("reply_status", 1);
+//					editor.commit();
+					httpClient.post(ConstantValue.ACTIVE_ANDROID_REPLY_PUSH, params,
+							new JsonHttpResponseHandler() {
+
+								@Override
+								public void onSuccess(int statusCode,
+													  Header[] headers, JSONObject result) {
+									try {
+										if (result.getString("result").equals("ok")) {
+											showInfo("设置成功~");
+										} else {
+											showInfo("设置失败，请稍候再试~");
+											reply_tb.setChecked(false);
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+
+									super.onSuccess(statusCode, headers, result);
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+													  Header[] headers, String responseString,
+													  Throwable throwable) {
+									showInfo("网络错误，请稍后再试~");
+									reply_tb.setChecked(false);
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
 				} else {
 
-					editor.putInt("reply_status", 0);
-					editor.commit();
+//					editor.putInt("reply_status", 0);
+//					editor.commit();
+					httpClient.post(ConstantValue.DEACTIVE_ANDROID_REPLY_PUSH, params,
+							new JsonHttpResponseHandler() {
+
+								@Override
+								public void onSuccess(int statusCode,
+													  Header[] headers, JSONObject result) {
+									try {
+										if (result.getString("result").equals("ok")) {
+											showInfo("设置成功~");
+										} else {
+											showInfo("设置失败，请稍候再试~");
+											reply_tb.setChecked(true);
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+
+									super.onSuccess(statusCode, headers, result);
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+													  Header[] headers, String responseString,
+													  Throwable throwable) {
+									showInfo("网络错误，请稍后再试~");
+									reply_tb.setChecked(true);
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
 				}
 			}
 		});
 
-		ToggleButton msg_tb = (ToggleButton) findViewById(R.id.set_msg_switch);
-		if (msg_status == 1) {
+		msg_tb = (ToggleButton) findViewById(R.id.set_msg_switch);
+		if (msg_status.equals("true")) {
 			msg_tb.setChecked(true);
 		} else {
 			msg_tb.setChecked(false);
@@ -158,13 +319,84 @@ public class SettingsAty extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
+
+				AsyncHttpClient httpClient = new AsyncHttpClient();
+
+				RequestParams params = new RequestParams();
+				params.put("uid", uid);
+				params.put("token", token);
+
+				httpClient.setTimeout(3000);
+
 				if (isChecked) {
-					editor.putInt("msg_status", 1);
-					editor.commit();
+//					editor.putInt("msg_status", 1);
+//					editor.commit();
+					httpClient.post(ConstantValue.ACTIVE_ANDROID_CHAT_PUSH, params,
+							new JsonHttpResponseHandler() {
+
+								@Override
+								public void onSuccess(int statusCode,
+													  Header[] headers, JSONObject result) {
+									try {
+										if (result.getString("result").equals("ok")) {
+											showInfo("设置成功~");
+										} else {
+											showInfo("设置失败，请稍候再试~");
+											msg_tb.setChecked(false);
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+
+									super.onSuccess(statusCode, headers, result);
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+													  Header[] headers, String responseString,
+													  Throwable throwable) {
+									showInfo("网络错误，请稍后再试~");
+									msg_tb.setChecked(false);
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
 				} else {
 
-					editor.putInt("msg_status", 0);
-					editor.commit();
+//					editor.putInt("msg_status", 0);
+//					editor.commit();
+					httpClient.post(ConstantValue.DEACTIVE_ANDROID_CHAT_PUSH, params,
+							new JsonHttpResponseHandler() {
+
+								@Override
+								public void onSuccess(int statusCode,
+													  Header[] headers, JSONObject result) {
+									try {
+										if (result.getString("result").equals("ok")) {
+											showInfo("设置成功~");
+										} else {
+											showInfo("设置失败，请稍候再试~");
+											msg_tb.setChecked(true);
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+
+									super.onSuccess(statusCode, headers, result);
+								}
+
+								@Override
+								public void onFailure(int statusCode,
+													  Header[] headers, String responseString,
+													  Throwable throwable) {
+									showInfo("网络错误，请稍后再试~");
+									msg_tb.setChecked(true);
+									super.onFailure(statusCode, headers,
+											responseString, throwable);
+								}
+							});
 				}
 			}
 		});
@@ -178,5 +410,10 @@ public class SettingsAty extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void showInfo(String info) {
+		Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT)
+				.show();
 	}
 }

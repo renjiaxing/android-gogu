@@ -24,6 +24,8 @@ import com.rjx.gogu02.service.NotificationService;
 import com.rjx.gogu02.update.UpdateManager;
 import com.rjx.gogu02.utils.ConstantValue;
 import com.rjx.gogu02.utils.NetworkResources;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengRegistrar;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -62,7 +64,7 @@ public class LoginAty extends Activity {
 		
 		Intent serIntent=new Intent(this, NotificationService.class);
 		startService(serIntent);
-		
+
 		getActionBar().setDisplayShowHomeEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowCustomEnabled(true);

@@ -29,6 +29,7 @@ import com.rjx.gogu02.aty.MainActivityold;
 import com.rjx.gogu02.domain.Micropost;
 import com.rjx.gogu02.utils.ConstantValue;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,9 +73,13 @@ public class TabFragment extends Fragment {
 	private SharedPreferences sp;
 //	private AsyncHttpClient httpClient;
 
-	public TabFragment(int pos) {
-		this.pos = pos;
-	}
+//	public TabFragment(int pos) {
+//		this.pos = pos;
+//	}
+
+	public TabFragment(){}
+
+//	public TabFragment() {};
 
 	@SuppressWarnings("static-access")
 	@Override
@@ -87,13 +92,18 @@ public class TabFragment extends Fragment {
 		sp = getActivity().getSharedPreferences("login1",
 				getActivity().getApplicationContext().MODE_PRIVATE);
 
+		if( getArguments() != null) {
+			int pos = getArguments().getInt("pos");
+			this.pos = pos;
+		}
+
 		View view = inflater.inflate(R.layout.frag, container, false);
 		mListView = (PullToRefreshListView) view.findViewById(R.id.list_view);
 
 		client = new DefaultHttpClient();
 		mListItems = new ArrayList<Micropost>();
 
-		mAdapter = new MicropostsAdapter(getActivity().getApplicationContext(),
+		mAdapter = new MicropostsAdapter(getActivity(),
 				mListItems, unreadList, TabAdapter.token, TabAdapter.user_id,
 				handler);
 		mListView.setAdapter(mAdapter);

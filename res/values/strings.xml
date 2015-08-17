@@ -12,5 +12,7 @@
         <item>其黄石</item>
         <item>蔡宏远</item>
     </string-array>
+    <string name="title_activity_show_vote_aty">ShowVoteAty</string>
+    <string name="title_activity_detail_vote_aty">DetailVoteAty</string>
 
 </resources>

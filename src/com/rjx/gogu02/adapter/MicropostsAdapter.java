@@ -47,6 +47,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings.Global;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -156,7 +157,19 @@ public class MicropostsAdapter extends BaseAdapter {
 
 		final Micropost tmp = (Micropost) getItem(position);
 		// idtv.setText(tmp.getId());
+
+//		String content_tmp=tmp.getContent();
+//
+//		int indexW=tmp.getContent().indexOf("http://www.hkexnews.hk");
+//		if (indexW!=-1){
+//			content_tmp=content_tmp.substring(0,indexW)+
+//					"<a href="+content_tmp.substring(indexW,content_tmp.length()-1)+">点击链接"+"</a>";
+//		}
+
+//		tmp.setContent(content_tmp);
 		CharSequence contentSequence = Html.fromHtml(tmp.getContent());
+		tv_content.setText(contentSequence);
+		tv_content.setMovementMethod(LinkMovementMethod.getInstance());
 		tv_content.setText(contentSequence);
 		tv_stock.setText(tmp.getStock_name());
 		tv_good_number.setText(tmp.getGood_number());
@@ -217,6 +230,7 @@ public class MicropostsAdapter extends BaseAdapter {
 				stock_id = tmp.getStock_id();
 				Bundle bd2 = new Bundle();
 				bd2.putString("stock_id", stock_id);
+				bd2.putString("stock_name", tmp.getStock_full_name());
 				Intent it3 = new Intent(context, StockMicropostListAty.class);
 				it3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 				it3.putExtras(bd2);

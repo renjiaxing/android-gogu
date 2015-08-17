@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+   <item android:drawable="@color/gogu_green" /> 
+
+</selector>
+<!-- From: file:/Users/renjiaxing/Documents/workspace/adtworkspace/gogu02/res/drawable/new_micropost.xml -->
